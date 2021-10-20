@@ -1,0 +1,15 @@
+{
+  "name": "image_generator",
+  "version": "1.0.0",
+  "description": "This is an application, witch create an images from different parts",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "tsc -w",
+    "start": "ts-node ./index.ts"
+  },
+  "author": "Boris Ponomarenko <borisponomarenko.dmi@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "ts-node": "^10.3.0"
+  }
+}
