@@ -1,11 +1,12 @@
 const path = require('path')
+const { readFiles } = require('./utils')
 
 type TContentItem = { [key: string]: string }
 
 interface TGenerator {
     imagesDirList: string[]
     content: TContentItem[]
-    generate: (count: number) => TContentItem[]
+    generate: (count: number) => Promise<TContentItem[]>
     drawImages: () => string
 }
 
@@ -13,19 +14,14 @@ export class RandomImagesGenerator implements TGenerator {
     private _content: TContentItem[] = []
     private _sequences: string[] = []
 
-    private _choices(images: string[], weights: number[]): [string, string] {
-        const randomNumber = Math.floor(Math.random() * 100)
-        let result: string = ''
-        let index: string = ''
+    private _choices(names: string[], weights: number[]): [string, string] {
+        const sum = weights.reduce((prev, curr) => prev + curr, 0);
+        let acc = 0;
+        weights = weights.map(percent => (acc = percent + acc));        
+        let randomNumber = Math.random() * sum;
+        const element = names[weights.filter(percent => percent <= randomNumber).length]
 
-        for (let i = 0; i < weights.length; i++) {
-            if (randomNumber <= weights[i]) {
-                result = images[i]
-                index = String(i)
-            }
-        }
-
-        return [ result, index ]
+        return [element, `${names.indexOf(element)}`]
     }
 
     constructor(public imagesDirList: string[] = []) {}
@@ -34,20 +30,20 @@ export class RandomImagesGenerator implements TGenerator {
         return this._content
     }
 
-    generate(count: number = 1): TContentItem[] {
+    async generate(count: number = 1): Promise<TContentItem[]> {
         const content: TContentItem[] = []
-
+        
         while (count > 0) {
             const image: TContentItem = {}
             let sequence: string = ''
 
-            for (let dirName in this.imagesDirList) {
-                const contentList: string[] = [] // file paths to images in folder
+            for (let dirName of this.imagesDirList) {
+                const contentList: string[] = await readFiles(path.join('./', 'images', dirName))                
                 const names: string[] = []
                 const percents: number[] = []
 
-                for (let filename in contentList) {
-                    let [ name, percent ] = filename.split('.')[0].split('#')
+                for (const filename of contentList) {
+                    let [ name, percent ]: string[] = filename.split('.')[0].split('#')
                     names.push(name)
                     percents.push(Number(percent))
                 }
@@ -60,7 +56,7 @@ export class RandomImagesGenerator implements TGenerator {
             if (!(sequence in this._sequences)) {
                 this._sequences.push(sequence)
                 content.push(image)
-                count -= 1
+                count--
             }
         }
 

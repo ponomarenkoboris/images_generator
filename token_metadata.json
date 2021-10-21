@@ -1,0 +1,22 @@
+{
+    "name": "Testing generation",
+    "symbol": "YU",
+    "description": "This is NFT generation application",
+    "seller_fee_basis_points": 500,
+    "image": "",
+    "attributes": [],
+    "collection": {
+        "name": "Testing generation",
+        "family": "Generation"
+    },
+    "properties": {
+        "files": [],
+        "category": "image",
+        "creators": [
+            {
+                "address": "6mkg9xSeh2mFv3GStGpobcCB1G3GNtrE7xUoa8cCV4bn",
+                "share": 100
+            }
+        ]
+    }
+}
