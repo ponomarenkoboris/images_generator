@@ -1,0 +1,6 @@
+venv
+dist
+.idea
+assets
+contract
+__pycache__
