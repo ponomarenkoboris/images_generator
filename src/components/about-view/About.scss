@@ -1,0 +1,26 @@
+.about-container {
+    padding: 30px;
+    height: 90vh;
+
+    & > ul {
+        font-size: 1.3rem;
+        font-weight: 300;
+        list-style: none;
+
+        & > li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+
+            & > img {
+                margin-right: 10px;
+                height: 30px;
+                width: auto;
+            }
+        }
+
+        & > li:nth-child(6n) {
+            margin: 0;
+        }
+    }
+}

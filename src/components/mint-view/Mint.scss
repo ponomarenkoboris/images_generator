@@ -1,0 +1,38 @@
+.mint-container {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .description {
+    position: absolute;
+    top: 43%;
+    animation: descriptionIntro 2s;
+
+    p {
+      font-size: 1.5em;
+      font-weight: 300;
+    }
+  }
+
+  .wallet-info {
+    text-align: center;
+    font-weight: 300;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  @keyframes descriptionIntro {
+    from {
+      top: 35%;
+      opacity: 0;
+    }
+
+    to {
+      top: 43%;
+      opacity: 1;
+    }
+  }
+}
