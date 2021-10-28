@@ -1,11 +1,6 @@
-import random
-import os
-import shutil
-import json
+import random, os, shutil, json, time
 from .merge_images import merge_images
-# TODO solve the problem of repeating sequences!
-# (create a counter that will be count a try to generate sequence that is not in the sequences array)
-
+#TODO append shuffle method
 PATH_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../')
 
 class RandomImageGenerator:
@@ -23,10 +18,15 @@ class RandomImageGenerator:
     def content(self):
         return self.__content
 
-    def generate(self, count=1):
+    def generate(self, count = 1, generator_time_limit = False):
         content = []
 
+        timeout = time.time() + generator_time_limit if generator_time_limit != False else None
+
         while count > 0:
+            if timeout is not None and timeout - time.time() <= 0:
+                break
+
             image = {}
             sequence = ''
 
@@ -44,7 +44,7 @@ class RandomImageGenerator:
                 image[dir_name] = result
                 sequence += index
 
-            print(f'sequence - {sequence} - already exist?: {sequence in self.__sequences}')
+            print(f'Count of images data - №{count}, sequence - {sequence} - already exist?: {sequence in self.__sequences}')
 
             if sequence not in self.__sequences:
                 self.__sequences.append(sequence)
@@ -112,3 +112,7 @@ class RandomImageGenerator:
             counter += 1
 
         return 'Success!'
+
+    def shuffle_assets(self):
+        assets_list = os.listdir(os.path.join(PATH_ROOT, 'assets'))
+        print(assets_list)
