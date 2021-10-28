@@ -44,8 +44,6 @@ class RandomImageGenerator:
                 image[dir_name] = result
                 sequence += index
 
-            print(f'Count of images data - №{count}, sequence - {sequence} - already exist?: {sequence in self.__sequences}')
-
             if sequence not in self.__sequences:
                 self.__sequences.append(sequence)
                 content.append(image)
@@ -81,7 +79,12 @@ class RandomImageGenerator:
             output_path = os.path.join(PATH_ROOT, 'assets')
             settings = {}
 
-            merge_images(filename=counter, data=image_settings, output=output_path, conf=output_images_conf)
+            merge_images(
+                filename=counter,
+                data=image_settings,
+                output=output_path,
+                conf=output_images_conf
+            )
 
             for section, value in token_metadata.items():
                 settings[section] = value
@@ -115,4 +118,3 @@ class RandomImageGenerator:
 
     def shuffle_assets(self):
         assets_list = os.listdir(os.path.join(PATH_ROOT, 'assets'))
-        print(assets_list)
