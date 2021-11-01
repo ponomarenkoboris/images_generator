@@ -1,17 +1,14 @@
 import { useMemo } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router} from 'react-router-dom'
 import NavBar from './components/layout/NavBar'
-import About from './components/about-view/About'
-import Mint from './components/mint-view/Mint'
+import MainLayout from './components/layout/MainLayout'
 import './App.scss'
 import { clusterApiUrl } from '@solana/web3.js'
 import { getPhantomWallet, getSlopeWallet, getSolflareWallet, getSolletWallet, getSolletExtensionWallet } from '@solana/wallet-adapter-wallets'
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui'
-import { network, candyMachineId, config, connection, startDateSeed, treasury } from './utils/project-utils'
-import { WalletContextProvider } from './context/walletContext'
-
-const txTimeout = 30000
+import { network } from './utils/project-utils'
+import { WalletContextProvider } from './context/WalletContext'
 
 const App = () => {
     const endpoint = useMemo(() => clusterApiUrl(network), [])
@@ -27,31 +24,15 @@ const App = () => {
         <>
             <Router>
                 <NavBar />
-                <main>
-                    <Switch>
-                        <WalletContextProvider>
-                            <Route path="/about">
-                                <About />
-                            </Route>
-                            <Route exact path="/">
-                                <ConnectionProvider endpoint={endpoint}>
-                                    <WalletProvider wallets={wallets} autoConnect={true}>
-                                        <WalletDialogProvider>
-                                            <Mint
-                                                candyMachineId={candyMachineId}
-                                                config={config}
-                                                connection={connection}
-                                                startDate={startDateSeed}
-                                                treasury={treasury}
-                                                txTimeout={txTimeout}
-                                            />
-                                        </WalletDialogProvider>
-                                    </WalletProvider>
-                                </ConnectionProvider>
-                            </Route>
-                        </WalletContextProvider>
-                    </Switch>
-                </main>
+                <ConnectionProvider endpoint={endpoint}>
+                    <WalletProvider wallets={wallets} autoConnect={true}>
+                        <WalletDialogProvider>
+                            <WalletContextProvider>
+                                <MainLayout />
+                            </WalletContextProvider>
+                        </WalletDialogProvider>
+                    </WalletProvider>
+                </ConnectionProvider>
             </Router>
         </>
     )

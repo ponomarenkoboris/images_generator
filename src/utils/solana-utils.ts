@@ -62,11 +62,7 @@ export const awaitTransactionSignatureConfirmation = async (
                 txid,
                 (result, context) => {
                     done = true
-                    status = {
-                        slot: context.slot,
-                        confirmations: 0,
-                        err: result.err
-                    }
+                    status = { slot: context.slot, confirmations: 0, err: result.err }
                     if (result.err) {
                         console.log('Rejected via websocket', result.err)
                         reject(status)
@@ -85,8 +81,7 @@ export const awaitTransactionSignatureConfirmation = async (
             // eslint-disable-next-line no-loop-func
             (async () => {
                 try {
-                    const signatureStatuses =
-                        await connection.getSignatureStatuses([txid])
+                    const signatureStatuses = await connection.getSignatureStatuses([txid])
                     status = signatureStatuses && signatureStatuses.value[0]
                     if (!done) {
                         if (!status) {
@@ -158,21 +153,12 @@ export const getCandyMachineState = async (
     candyMachineId: anchor.web3.PublicKey,
     connection: anchor.web3.Connection
 ): Promise<CandyMachineState> => {
-    const provider = new anchor.Provider(connection, anchorWallet, {
-        preflightCommitment: 'recent'
-    })
+    const provider = new anchor.Provider(connection, anchorWallet, { preflightCommitment: 'recent' })
 
-    const idl = (await anchor.Program.fetchIdl(
-        CANDY_MACHINE_PROGRAM,
-        provider
-    )) as anchor.Idl
+    const idl = (await anchor.Program.fetchIdl(CANDY_MACHINE_PROGRAM, provider)) as anchor.Idl
 
     const program = new anchor.Program(idl, CANDY_MACHINE_PROGRAM, provider)
-    const candyMachine = {
-        id: candyMachineId,
-        connection,
-        program
-    }
+    const candyMachine = { id: candyMachineId, connection, program }
 
     const state = await program.account.candyMachine.fetch(candyMachineId)
     const itemsAvailable = state.data.itemsAvailable.toNumber()
@@ -182,13 +168,7 @@ export const getCandyMachineState = async (
     let goLiveDate = state.data.goLiveDate.toNumber()
     goLiveDate = new Date(goLiveDate * 1000)
 
-    return {
-        candyMachine,
-        itemsAvailable,
-        itemsRedeemed,
-        itemsRemaining,
-        goLiveDate
-    }
+    return { candyMachine, itemsAvailable, itemsRedeemed, itemsRemaining, goLiveDate }
 }
 
 const getMasterEdition = async (
@@ -276,27 +256,9 @@ export const mintOneToken = async (
                 lamports: rent,
                 programId: TOKEN_PROGRAM_ID
             }),
-            Token.createInitMintInstruction(
-                TOKEN_PROGRAM_ID,
-                mint.publicKey,
-                0,
-                payer,
-                payer
-            ),
-            createAssociatedTokenAccountInstruction(
-                token,
-                payer,
-                payer,
-                mint.publicKey
-            ),
-            Token.createMintToInstruction(
-                TOKEN_PROGRAM_ID,
-                mint.publicKey,
-                token,
-                payer,
-                [],
-                1
-            )
+            Token.createInitMintInstruction(TOKEN_PROGRAM_ID, mint.publicKey, 0, payer, payer),
+            createAssociatedTokenAccountInstruction(token, payer, payer, mint.publicKey),
+            Token.createMintToInstruction(TOKEN_PROGRAM_ID, mint.publicKey, token, payer, [], 1)
         ]
     })
 }

@@ -1,13 +1,17 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useReducer, useContext } from 'react'
 import * as anchor from '@project-serum/anchor'
-import { awaitTransactionSignatureConfirmation, CandyMachine, getCandyMachineState, mintOneToken } from '../../utils/solana-utils'
+import { awaitTransactionSignatureConfirmation, getCandyMachineState, mintOneToken } from '../../utils/solana-utils'
 import { WalletDialogButton } from '@solana/wallet-adapter-material-ui'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
-import { useAnchorWallet } from '@solana/wallet-adapter-react'
 import { Button, CircularProgress } from '@material-ui/core'
 import { CountDown } from './CountDown'
-import { WalletContext } from '../../context/walletContext'
+import { actionType, mintReduser } from './helpers/mintReducer'
+import { useAnchorWallet } from '@solana/wallet-adapter-react'
 import './Mint.scss'
+
+import { WalletContext } from '../../context/WalletContext'
+
+// TODO debug (balance and remaining NFT should not update every time when path is changing)
 
 type MintProps = {
     candyMachineId: anchor.web3.PublicKey
@@ -24,136 +28,88 @@ type AlertState = {
     severity: 'success' | 'info' | 'warning' | 'error' | undefined
 }
 
-const Mint = ({
-    candyMachineId,
-    config,
-    connection,
-    startDate,
-    treasury,
-    txTimeout
-}: MintProps) => {
-    // TODO optimazation (create reducer function to change state, coplete context logic for saving wallet config)
-    const { contextWallet, setContextWallet } = useContext(WalletContext)
-    console.log('contextWallet.balance -> ', contextWallet?.balance)
-    console.log('contextWallet.itemsRemaining -> ', contextWallet?.itemsRemaining)
+const Mint = ({ candyMachineId, config, connection, startDate, treasury, txTimeout }: MintProps) => {
+    const { balance: contextBalance } = useContext(WalletContext)
 
-    const [balance, setBalance] = useState<number>()
+    const initialState = {
+        balance: contextBalance || null,
+        dateStart: new Date(startDate),
+        isSoldOut: false,
+        itemsRemaining: 0,
+        candyMachine: null,
+        isMinting: false
+    }
+    const [ state, dispatch ] = useReducer(mintReduser, initialState)
+
     const [isActive, setIsActive] = useState(false)
-    const [isSoldOut, setIsSoldOut] = useState(false)
-    const [isMinting, setIsMinting] = useState(false)
-    // const [itemsAvailable, setItemsAvailable] = useState(0)
-    // const [itemsRedeemed, setItemsRedeemed] = useState(0)
-    const [itemsRemaining, setItemsRemaining] = useState(0)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [alertState, setAlertState] = useState<AlertState>({
-        open: false,
-        message: '',
-        severity: undefined
-    })
+    const [alertState, setAlertState] = useState<AlertState>({ open: false, message: '', severity: undefined })
 
-    const [dateStart, setDateStart] = useState(new Date(startDate))
     const wallet = useAnchorWallet()
-    
-    const [candyMachine, setCandyMachine] = useState<CandyMachine>()
 
     const refreshCandyMachineState = () => {
+
         (async () => {
             if (!wallet) return
 
-            const {
-                candyMachine,
-                goLiveDate,
-                // itemsAvailable,
-                // itemsRedeemed,
-                itemsRemaining
-            } = await getCandyMachineState(
-                wallet as anchor.Wallet,
-                candyMachineId,
-                connection
-            )
+            try {
+                const { candyMachine, goLiveDate, itemsRemaining } = await getCandyMachineState(wallet as anchor.Wallet, candyMachineId, connection)
 
-            // setItemsAvailable(itemsAvailable)
-            setItemsRemaining(itemsRemaining)
-            // setItemsRedeemed(itemsRedeemed)
-            setIsSoldOut(itemsRemaining === 0)
-            setDateStart(goLiveDate)
-            setCandyMachine(candyMachine)
+                dispatch({ type: actionType.REFRESH_CANDY_MACHINE_STATE, payload: {
+                    itemsRemaining: itemsRemaining,
+                    isSoldOut: itemsRemaining === 0,
+                    dateStart: goLiveDate,
+                    candyMachine: candyMachine
+                }})
 
-            setContextWallet(prevWallet => ({ ...prevWallet, itemsRemaining }))
+            } catch (error) {
+                console.error(error)
+            }
         })()
     }
 
     const mintToken = async (): Promise<void> => {
         try {
-            setIsMinting(true)
-            if (wallet && candyMachine?.program) {
-                const mintTxId = await mintOneToken(
-                    candyMachine,
-                    config,
-                    wallet.publicKey,
-                    treasury
-                )
+            dispatch({ type: actionType.SET_IS_MINTING, payload: { isMinting: true } })
+            if (wallet && state.candyMachine?.program) {
+                const mintTxId = await mintOneToken( state.candyMachine, config, wallet.publicKey, treasury)
 
-                const status = await awaitTransactionSignatureConfirmation(
-                    mintTxId,
-                    txTimeout,
-                    connection,
-                    'singleGossip',
-                    false
-                )
+                const status = await awaitTransactionSignatureConfirmation(mintTxId, txTimeout, connection, 'singleGossip', false)
 
                 if (!status?.err) {
-                    setAlertState({
-                        open: true,
-                        message: 'Congratulations! Mint succeeded!',
-                        severity: 'success'
-                    })
+                    setAlertState({ open: true, message: 'Congratulations! Mint succeeded!', severity: 'success' })
                 } else {
-                    setAlertState({
-                        open: true,
-                        message: 'Mint failed! Please try again!',
-                        severity: 'error'
-                    })
+                    setAlertState({ open: true, message: 'Mint failed! Please try again!', severity: 'error' })
                 }
             }
         } catch (error: any) {
-            let message =
-                error.msg ||
-                'Minting failed! Please try again!Minting failed! Please try again!'
+            let message = error.msg || 'Minting failed! Please try again!Minting failed! Please try again!'
+
             if (!error.msg) {
                 if (error.message.indexOf('0x138')) {
                 } else if (error.message.indexOf('0x137')) {
                     message = 'SOLD OUT!'
                 } else if (error.message.indexOf('0x135')) {
-                    message =
-                        'Insufficient funds to mint. Please fund your wallet.'
+                    message = 'Insufficient funds to mint. Please fund your wallet.'
                 }
             } else {
                 if (error.code === 311) {
                     message = 'SOLD OUT!'
-                    setIsSoldOut(true)
+                    dispatch({ type: actionType.SET_IS_SOLD_OUT, payload: { isSoldOut: true } })
                 } else if (error.code === 312) {
                     message = 'Minting period hasn`t started yet.'
                 }
             }
 
-            setAlertState({
-                open: true,
-                message,
-                severity: 'error'
-            })
+            setAlertState({ open: true, message, severity: 'error' })
         } finally {
             if (wallet) {
                 const balance = await connection.getBalance(wallet.publicKey)
                 const solBalance = balance / LAMPORTS_PER_SOL
-                setBalance(solBalance)
-                setContextWallet(prevWallet => ({ 
-                    ...prevWallet, 
-                    balance: solBalance
-                }))
+                dispatch({ type: actionType.SET_BALANCE, payload: { setBalance: solBalance } })
             }
-            setIsMinting(false)
+            dispatch({ type: actionType.SET_IS_MINTING, payload: { isMinting: false } })
             refreshCandyMachineState()
         }
     }
@@ -163,11 +119,7 @@ const Mint = ({
             if (wallet) {
                 const balance = await connection.getBalance(wallet.publicKey)
                 const solBalance = balance / LAMPORTS_PER_SOL
-                setBalance(solBalance)
-                setContextWallet(prevWallet => ({ 
-                    ...prevWallet, 
-                    balance: solBalance
-                }))
+                dispatch({ type: actionType.SET_BALANCE, payload: { setBalance: solBalance } })
             }
         })()
     }, [wallet, connection])
@@ -180,8 +132,8 @@ const Mint = ({
                 <div className={wallet ? 'wallet-info' : 'description'}>
                     {wallet ? (
                         <>
-                            <p>Your balance - {balance || contextWallet?.balance} SOL</p>
-                            <p>Images remaining - {itemsRemaining || contextWallet?.itemsRemaining}</p>
+                            <p>Your balance - {state.balance} SOL</p>
+                            <p>Images remaining - {state.itemsRemaining}</p>
                         </>
                     ) : (
                         <p>Generate a unique image</p>
@@ -191,20 +143,20 @@ const Mint = ({
                     <Button
                         variant="outlined"
                         color="primary"
-                        disabled={isSoldOut || isMinting || !isActive}
+                        disabled={state.isSoldOut || state.isMinting || !isActive}
                         onClick={mintToken}
                     >
-                        {isSoldOut ? (
+                        {state.isSoldOut ? (
                             'Sold Out'
                         ) : isActive ? (
-                            isMinting ? (
+                            state.isMinting ? (
                                 <CircularProgress />
                             ) : (
                                 'Mint Token'
                             )
                         ) : (
                             <CountDown
-                                date={dateStart}
+                                date={state.dateStart}
                                 onMount={({ completed }) =>
                                     completed && setIsActive(true)
                                 }

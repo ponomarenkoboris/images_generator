@@ -1,22 +1,13 @@
-import { createContext, useState } from 'react'
-
-export type Wallet = {
-    balance?: number | null
-    itemsRemaining?: number | null
-}
+import { createContext, useState } from "react"
 
 type WalletContextType = {
-    contextWallet: Wallet | null
-    setContextWallet: React.Dispatch<React.SetStateAction<Wallet | null>>
-}
-
-type WalletContextProviderProps = {
-    children: React.ReactNode
+    balance: number | null
+    setBalance: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 export const WalletContext = createContext({} as WalletContextType)
 
-export const WalletContextProvider = ({ children }: WalletContextProviderProps) => {
-    const [contextWallet, setContextWallet] = useState<Wallet | null>(null)
-    return <WalletContext.Provider value={{ contextWallet, setContextWallet }}>{children}</WalletContext.Provider>
+export const WalletContextProvider = ({ children }: { children: React.ReactNode }) => {
+    const [balance, setBalance] = useState<number | null>(null)
+    return <WalletContext.Provider value={{ balance, setBalance }}>{children}</WalletContext.Provider>
 }
