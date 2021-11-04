@@ -1,16 +1,23 @@
-const path = require('path')
-const { RandomImagesGenerator } = require('./generator/generator.ts')
-const { readFiles } = require('./generator/utils')
+import path from 'path'
+import fs from 'fs'
+import RandomImagesGenerator from './generator/generator'
+import { TConfig, TMetadata } from './generator/types'
 
-async function main(): Promise<void> {
-    try {
-        const imageDir = await readFiles(path.join('./images'))
-        const generator = new RandomImagesGenerator(imageDir)
-        await generator.generate(10)
-        console.log(generator.content)
-    } catch (error) {
-        console.error(error)
-    }
+type RootConfParsed = {
+    token_metadata: TMetadata
+    output_image_configuration: TConfig
+}
+
+function main(): void {        
+    const imageDir = fs.readdirSync(path.join('./images'))
+    const { token_metadata: metadata, output_image_configuration: conf }: RootConfParsed
+        = JSON.parse(fs.readFileSync(path.join('root_configuration.json'), 'utf-8'))
+
+    if (!imageDir.length) throw new Error('Images folder is empty')
+
+    const generator = new RandomImagesGenerator(imageDir, metadata, conf)
+    generator.generate(conf.images_count)
+    generator.drawImages()
 }
 
 main()
