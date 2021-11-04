@@ -1,13 +1,13 @@
 $dialog-font-color: #fff;
 
 .MuiPaper-root {
-  color: $dialog-font-color !important;
+	color: $dialog-font-color !important;
 
-  .MuiButton-root {
-    color: $dialog-font-color !important;
-  }
+	.MuiButton-root {
+		color: $dialog-font-color !important;
+	}
 
-  .MuiIconButton-root {
-    color: $dialog-font-color !important;
-  }
+	.MuiIconButton-root {
+		color: $dialog-font-color !important;
+	}
 }

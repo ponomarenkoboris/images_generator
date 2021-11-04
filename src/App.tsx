@@ -8,7 +8,6 @@ import { getPhantomWallet, getSlopeWallet, getSolflareWallet, getSolletWallet, g
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui'
 import { network } from './utils/project-utils'
-import { WalletContextProvider } from './context/WalletContext'
 
 const App = () => {
     const endpoint = useMemo(() => clusterApiUrl(network), [])
@@ -27,9 +26,7 @@ const App = () => {
                 <ConnectionProvider endpoint={endpoint}>
                     <WalletProvider wallets={wallets} autoConnect={true}>
                         <WalletDialogProvider>
-                            <WalletContextProvider>
-                                <MainLayout />
-                            </WalletContextProvider>
+                            <MainLayout />
                         </WalletDialogProvider>
                     </WalletProvider>
                 </ConnectionProvider>

@@ -78,32 +78,29 @@ export const awaitTransactionSignatureConfirmation = async (
             console.error('WS error in setup', txid, error)
         }
         while (!done && queryStatus) {
-            // eslint-disable-next-line no-loop-func
-            (async () => {
-                try {
-                    const signatureStatuses = await connection.getSignatureStatuses([txid])
-                    status = signatureStatuses && signatureStatuses.value[0]
-                    if (!done) {
-                        if (!status) {
-                            console.log('REST null result for', txid, status)
-                        } else if (status.err) {
-                            console.log('REST error for', txid, status)
-                            done = true
-                            reject(status.err)
-                        } else if (!status.confirmations) {
-                            console.log('REST no confirmations', txid, status)
-                        } else {
-                            console.log('REST confirmation for', txid, status)
-                            done = true
-                            resolve(status)
-                        }
-                    }
-                } catch (error) {
-                    if (!done) {
-                        console.log('REST connection error: txid', txid, error)
+            try {
+                const signatureStatuses = await connection.getSignatureStatuses([txid])
+                status = signatureStatuses && signatureStatuses.value[0]
+                if (!done) {
+                    if (!status) {
+                        console.log('REST null result for', txid, status)
+                    } else if (status.err){
+                        console.log('REST error for', txid, status)
+                        done = true
+                        reject(status.err)
+                    } else if (!status.confirmations) {
+                        console.log('REST confirmations', txid, status)
+                    } else {
+                        console.log('REST confirmation for', txid, status)
+                        done = true
+                        resolve(status)
                     }
                 }
-            })()
+            } catch (error) {
+                if (!done) {
+                    console.log('REST connnection error: txid', txid, error)
+                }
+            }
             await sleep(2000)
         }
     })

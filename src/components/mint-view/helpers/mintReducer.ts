@@ -1,11 +1,7 @@
 import { CandyMachine } from '../../../utils/solana-utils'
-
-export const actionType = {
-    REFRESH_CANDY_MACHINE_STATE: 'REFRESH_CANDY_MACHINE_STATE',
-    SET_IS_SOLD_OUT: 'SET_IS_SOLD_OUT',
-    SET_BALANCE: 'SET_BALANCE',
-    SET_IS_MINTING: 'SET_IS_MINTING'
-}
+import { actionsType } from './actions'
+import { ActionCreator } from './actionCreators'
+import { TRefreshingPayload } from './actionCreators'
 
 export type State = {
     dateStart: Date
@@ -16,35 +12,31 @@ export type State = {
     isMinting: boolean
 }
 
-type ActionCreator = {
-    type: string
-    payload: any
-}
-
 export const mintReduser = (state: State, action: ActionCreator): State => {
     switch(action.type) {
-        case actionType.REFRESH_CANDY_MACHINE_STATE:
+        case actionsType.REFRESH_CANDY_MACHINE_STATE:
+            const { itemsRemaining, isSoldOut, dateStart, candyMachine } = action.payload as TRefreshingPayload
             return {
                 ...state,
-                itemsRemaining: action.payload.itemsRemaining,
-                isSoldOut: action.payload.isSoldOut,
-                dateStart: action.payload.dateStart,
-                candyMachine: action.payload.candyMachine
+                itemsRemaining: itemsRemaining,
+                isSoldOut: isSoldOut,
+                dateStart: dateStart,
+                candyMachine: candyMachine
             }
-        case actionType.SET_IS_SOLD_OUT:
+        case actionsType.SET_IS_SOLD_OUT:
             return {
                 ...state,
-                isSoldOut: action.payload.isSoldOut
+                isSoldOut: action.payload as boolean
             }
-        case actionType.SET_BALANCE:
+        case actionsType.SET_BALANCE:
             return {
                 ...state,
-                balance: action.payload.setBalance
+                balance: action.payload as number
             }
-        case actionType.SET_IS_MINTING:
+        case actionsType.SET_IS_MINTING:
             return {
                 ...state,
-                isMinting: action.payload.setIsMinting
+                isMinting: action.payload as boolean
             }
         default:
             return state
