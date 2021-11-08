@@ -1,7 +1,8 @@
 import { CandyMachine } from '../../../utils/solana-utils'
 import { actionsType } from './actions'
 import { ActionCreator } from './actionCreators'
-import { TRefreshingPayload } from './actionCreators'
+import { TRefreshingPayload, TAlertState } from './actionCreators'
+
 
 export type State = {
     dateStart: Date
@@ -10,6 +11,8 @@ export type State = {
     itemsRemaining: number
     candyMachine: CandyMachine | null
     isMinting: boolean
+    isActive: boolean
+    alertState: TAlertState
 }
 
 export const mintReduser = (state: State, action: ActionCreator): State => {
@@ -38,6 +41,21 @@ export const mintReduser = (state: State, action: ActionCreator): State => {
                 ...state,
                 isMinting: action.payload as boolean
             }
+
+        case actionsType.UPDATE_ALERT_STATE:
+            return {
+                ...state,
+                alertState: {
+                    ...action.payload as TAlertState
+                }
+            }
+
+        case actionsType.UPDATE_IS_ACTIVE:
+            return {
+                ...state,
+                isActive: action.payload as boolean
+            }
+            
         default:
             return state
     }

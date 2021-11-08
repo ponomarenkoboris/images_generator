@@ -28,6 +28,10 @@
 		}
 	}
 
+	.MuiAlert-root {
+		color: #000 !important;
+	}
+
 	@keyframes descriptionIntro {
 		from {
 			transform: translateY(-100px);
