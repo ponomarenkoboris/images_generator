@@ -88,7 +88,7 @@ class RandomImageGenerator:
                     settings[section] = f'{value}-{counter}'
 
                 if section == 'name':
-                    settings[section] += f' {counter}'
+                    settings[section] += f' #{counter}'
 
                 if section == "image":
                     settings[section] = f'{counter}.png'
