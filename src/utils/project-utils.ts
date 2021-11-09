@@ -2,21 +2,21 @@ import { web3 } from '@project-serum/anchor'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 
 export const treasury = new web3.PublicKey(
-    '3ZgBR3aHx6eD9SrzmAVYBdP1GESyESFYfs65ZUWjH9Qa'
+    'DSv8huUhNzgpyrtQ5RBFiXbpgpGFe4wxjRGFUiLNCF3B' // in .cache/[...]-tmep file, authority field (after upload assets)
 )
 
 export const config = new web3.PublicKey(
-    'H4jm8vsihxWsTevMhQ7CRWBKpb2ciBVU99ngAqKu5yyw'
+    '3x4teKbQifidM1tqmeoakjTMRNgD9xmXoeaqNgVzbKcq' // in .cache/[...]-tmep file, config field (after upload assets)
 )
 
 export const candyMachineId = new web3.PublicKey(
-    'AW7zCmUSLYdteruGRNstax5RuoUn2R6EyjEDzPYtbUXB'
+    'HRqDFjGwcaqxSwRrSxDbbABVqEuBPzWYVEp5VD9y5Eoi' // in .cache/[...]-tmep file, candyMachineAddress field (after upload assets)
 )
 
-export const network = 'devnet' as WalletAdapterNetwork
+export const network = 'devnet' as WalletAdapterNetwork // 
 
 export const rpcHost = 'https://explorer-api.devnet.solana.com'
 
 export const connection = new web3.Connection(rpcHost)
 
-export const startDateSeed = parseInt('1635864815.483', 10)
+export const startDateSeed = parseInt('1636469840.249', 10) // - in .cache/[...]-tmep file, startDate field (after upload assets)

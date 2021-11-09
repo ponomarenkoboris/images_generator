@@ -90,7 +90,7 @@ const Mint = ({ candyMachineId, config, connection, startDate, treasury, txTimeo
                 }
             }
         } catch (error: any) {
-            let message = error.msg || 'Minting failed! Please try again!Minting failed! Please try again!'
+            let message = error.msg || 'Minting failed! Please try again!'
 
             if (!error.msg) {
                 if (error.message.indexOf('0x138')) {
