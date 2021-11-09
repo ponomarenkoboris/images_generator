@@ -6,6 +6,7 @@ export type TConfig = {
         width: number,
         height: number
     },
+    sequences_is_unique: boolean
     backGroundColor: [number, number, number, number]
 }
 

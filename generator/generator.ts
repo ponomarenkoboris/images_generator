@@ -15,6 +15,7 @@ class RandomImagesGenerator implements TGenerator {
     private _content: TContentItem[] = []
     private _sequences: string[] = []
     private _imagesDirList: string [] = []
+    private _maxSequencesCount: number = 0
     private _config: TConfig = null
     private _metadata: TMetadata = null
 
@@ -28,18 +29,46 @@ class RandomImagesGenerator implements TGenerator {
         return [element, `${names.indexOf(element)}`]
     }
 
+    private _calculateMaxSequenciesCount(): number {
+        let totalSequenceAmount: number = 0
+        for (const imageDir of this._imagesDirList) {
+            const variantsCount = fs.readdirSync(path.join(PATH_ROOT, 'images', imageDir)).length
+            totalSequenceAmount = !totalSequenceAmount ? variantsCount : totalSequenceAmount * variantsCount
+        }
+
+        return totalSequenceAmount
+    }
+
+    private _checkIsUniqueSequence(sequence: string): boolean {
+        let isUnique: boolean = true
+        for (const existesSequence of this._sequences) {
+            if (existesSequence === sequence) {
+                isUnique = false
+                break
+            }
+        }
+
+        return isUnique
+    }
+
     constructor(imagesDirList: string[], metadata: TMetadata, config: TConfig) {
         this._imagesDirList = imagesDirList
         this._metadata = metadata
         this._config = config
+        this._maxSequencesCount = this._calculateMaxSequenciesCount()
     }
 
     get content (): TContentItem[] { return this._content }
 
-    generate(count: number = 1): TContentItem[] {
+    generate(count: number = 1, sequencesIsUnique: boolean = true): TContentItem[] {
         const content: TContentItem[] = []
         
         while (count > 0) {
+            if (this._sequences.length >= this._maxSequencesCount && sequencesIsUnique) {
+                console.log(`The maximum possible number of sequences was generated: ${this._maxSequencesCount}`)
+                break
+            }
+
             const image: TContentItem = {}
             let sequence: string = ''
 
@@ -58,8 +87,14 @@ class RandomImagesGenerator implements TGenerator {
                 image[dirName] = result
                 sequence += index
             }
-
-            if (!(sequence in this._sequences)) {
+            
+            if (sequencesIsUnique) {
+                if (this._checkIsUniqueSequence(sequence)) {
+                    this._sequences.push(sequence)
+                    content.push(image)
+                    count--
+                }
+            } else {
                 this._sequences.push(sequence)
                 content.push(image)
                 count--
@@ -84,7 +119,7 @@ class RandomImagesGenerator implements TGenerator {
 
         let counter: number = 0
 
-        const config = JSON.parse(JSON.stringify(this._config).replace('backgroud-color-rgba', 'backGroundColor'))
+        const config = JSON.parse(JSON.stringify(this._config).replace('backgroud_color_rgba', 'backGroundColor'))
         for (const imageSettings of this._content) {
 
             mergeImages(`${counter}`, imageSettings, outputDirPath, config)
@@ -92,7 +127,7 @@ class RandomImagesGenerator implements TGenerator {
             let settings: TMetadata = {
                 ...this._metadata,
                 symbol: `${this._metadata.symbol}-${counter}`,
-                name: `${this._metadata.name} ${counter}`,
+                name: `${this._metadata.name} #${counter}`,
                 image: `${counter}.png`,
                 properties: {
                     ...this._metadata.properties,

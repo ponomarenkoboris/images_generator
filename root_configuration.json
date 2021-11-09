@@ -3,7 +3,7 @@
         "name": "Testing new generation",
         "symbol": "YnU",
         "description": "This second times generated nft",
-        "seller_fee_basis_points": 1000,
+        "seller_fee_basis_points": 0,
         "image": "",
         "attributes": [],
         "collection": {
@@ -15,18 +15,19 @@
             "category": "image",
             "creators": [
                 {
-                    "address": "6mkg9xSeh2mFv3GStGpobcCB1G3GNtrE7xUoa8cCV4bn",
-                    "share": 10000
+                    "address": "DSv8huUhNzgpyrtQ5RBFiXbpgpGFe4wxjRGFUiLNCF3B",
+                    "share": 100
                 }
             ]
         }
     },
     "output_image_configuration": {
-        "images_count": 5,
+        "images_count": 100,
         "size": {
             "width": 1416,
             "height": 672
         },
-        "backgroud-color-rgba": [0, 0, 0, 1]
+        "sequences_is_unique": true,
+        "backgroud_color_rgba": [0, 0, 0, 1]
     }
 }

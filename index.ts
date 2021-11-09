@@ -16,7 +16,7 @@ function main(): void {
     if (!imageDir.length) throw new Error('Images folder is empty')
 
     const generator = new RandomImagesGenerator(imageDir, metadata, conf)
-    generator.generate(conf.images_count)
+    generator.generate(conf.images_count, conf.sequences_is_unique)
     generator.drawImages()
 }
 

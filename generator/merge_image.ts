@@ -18,7 +18,9 @@ const findContent = (place: string, name: string) => {
     return contentPath
 }
 
-const defaultConfig: Omit<TConfig, 'images_count'> = {
+type ImageConfiguration = Omit<TConfig, 'images_count' | 'sequences_is_unique'>
+
+const defaultConfig: ImageConfiguration = {
     size: {
         width: 1416,
         height: 672
@@ -30,7 +32,7 @@ export default async  function mergeImages(
     filename: string, 
     contentItem: TContentItem, 
     output: string, 
-    config: Omit<TConfig, 'images_count'> = defaultConfig
+    config: ImageConfiguration = defaultConfig
 ): Promise<void> {
     
     const { width, height } = config.size
