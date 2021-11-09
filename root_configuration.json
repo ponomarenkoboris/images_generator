@@ -15,18 +15,20 @@
             "category": "image",
             "creators": [
                 {
-                    "address": "6mkg9xSeh2mFv3GStGpobcCB1G3GNtrE7xUoa8cCV4bn",
+                    "address": "3ZgBR3aHx6eD9SrzmAVYBdP1GESyESFYfs65ZUWjH9Qa",
                     "share": 10000
                 }
             ]
         }
     },
     "output_image_configuration": {
-        "images_count": 6,
+        "images_count": 100,
         "size": {
             "width": 1416,
             "height": 672
         },
-        "backgroud-color-rgba": [0, 0, 0, 250]
+        "time_limit": false,
+        "sequences_is_unique": true,
+        "backgroud_color_rgba": [0, 0, 0, 250]
     }
 }

@@ -9,7 +9,7 @@ default_conf = {
         'width': 1416,
         'height': 672
     },
-    "backgroud-color-rgba": [255, 255, 255, 255] # alpha: 255 == 100%
+    "backgroud_color_rgba": [255, 255, 255, 255] # alpha: 255 == 100%
 }
 
 def merge_images(filename=None, data=None, output=None, conf=None):
@@ -35,7 +35,7 @@ def merge_images(filename=None, data=None, output=None, conf=None):
     new_image = Image.new(
         mode='RGBA',
         size=(conf['size']['width'], conf['size']['height']),
-        color=tuple(conf['backgroud-color-rgba'])
+        color=tuple(conf['backgroud_color_rgba'])
     )
 
     for section, image in images:

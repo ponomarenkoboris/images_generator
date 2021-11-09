@@ -13,21 +13,33 @@ class RandomImageGenerator:
         result = random.choices(images, weights=weights)[0]
         return result, str(images.index(result))
 
+    def __calculate_max_sequencies_count(self):
+        total_sequence_amount = 0
+        for image_dir in self.images_dir:
+            variants_count = len(os.listdir(os.path.join(PATH_ROOT, 'images', image_dir)))
+            total_sequence_amount = total_sequence_amount * variants_count if total_sequence_amount != 0 else variants_count
+
+        return total_sequence_amount
+
     def __init__(self, images_dir_list, token_metadata, output_config):
         self.images_dir = images_dir_list
         self.__metadata = token_metadata
         self.__output_config = output_config
+        self.__max_sequences_count = self.__calculate_max_sequencies_count()
 
     @property
     def content(self):
         return self.__content
 
-    def generate(self, count = 1, generator_time_limit = False):
+    def generate(self, count = 1, sequences_is_unique = True, generator_time_limit = False):
         content = []
-
         timeout = time.time() + generator_time_limit if generator_time_limit != False else None
 
         while count > 0:
+            if len(self.__sequences) >= self.__max_sequences_count and sequences_is_unique:
+                print(f'The maximum possible number of sequences was generated: {self.__max_sequences_count}')
+                break
+
             if timeout is not None and timeout - time.time() <= 0:
                 break
 
@@ -48,7 +60,12 @@ class RandomImageGenerator:
                 image[dir_name] = result
                 sequence += index
 
-            if sequence not in self.__sequences:
+            if sequences_is_unique:
+                if sequence not in self.__sequences:
+                    self.__sequences.append(sequence)
+                    content.append(image)
+                    count -= 1
+            else:
                 self.__sequences.append(sequence)
                 content.append(image)
                 count -= 1
