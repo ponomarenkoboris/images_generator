@@ -1,0 +1,110 @@
+.assets__slices {
+	width: 90%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: column;
+
+	.assets {
+		margin-bottom: 30px;
+		.assets__header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 30px;
+
+			.append__bottom {
+				height: 36.5px;
+			}
+		}
+
+		.folder__wrapper {
+			display: flex;
+
+			.assets__list {
+				// width: 500px;
+
+				.file__wrapper {
+					padding: 20px 0;
+					display: flex;
+					justify-content: space-around;
+					align-items: center;
+
+					img {
+						max-width: 100px;
+						height: auto;
+					}
+
+					.file__name {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+
+						& > span {
+							font-size: 10px;
+							text-align: center;
+							width: 170px;
+						}
+					}
+
+					&:last-child {
+						margin-bottom: 10px;
+					}
+				}
+			}
+		}
+		.folder__actions {
+			visibility: hidden;
+			margin-left: 10px;
+
+			& > button:last-child {
+				margin-left: 5px;
+			}
+		}
+
+		.folder__wrapper:hover .folder__actions {
+			visibility: visible;
+		}
+	}
+
+	.assets__actions {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.generate__button {
+			color: #05a12e;
+			border: 1px solid rgba(5, 161, 46, 0.5);
+		}
+
+		.MuiButton-outlined.Mui-disabled {
+			border: 1px solid rgba(0, 0, 0, 0.12) !important;
+		}
+
+		.MuiButton-root.Mui-disabled {
+			color: rgba(0, 0, 0, 0.26) !important;
+		}
+		.append__bottom {
+			margin-bottom: 10px;
+		}
+	}
+}
+@media (max-width: 850px) {
+	.assets__slices {
+		flex-direction: column;
+
+		.assets__header {
+			flex-direction: column;
+
+			h2 {
+				margin-bottom: 10px;
+			}
+		}
+	}
+}
+
+@media (max-width: 619px) {
+	.assets__slices .assets .folder__actions > button:last-child {
+		margin-left: 0;
+	}
+}

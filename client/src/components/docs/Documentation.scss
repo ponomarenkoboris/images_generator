@@ -1,0 +1,106 @@
+$space-between-article: 40px;
+$article-border-bottom: 1px solid #e3e3e3;
+$theme-color: #3f51b5;
+
+a {
+	color: $theme-color;
+}
+
+h2,
+h1 {
+	margin: revert;
+}
+
+.image__wrapper {
+	display: flex;
+	justify-content: center;
+	img {
+		width: 100%;
+		height: auto;
+	}
+}
+
+.information-block {
+	p {
+		text-indent: 40px;
+	}
+}
+
+.note {
+	margin-top: 10px;
+	background-color: #d2f0fc;
+	border-left: 3px solid $theme-color;
+	padding: 20px 0 20px 15px;
+	max-width: 700px;
+	font-style: italic;
+}
+
+.docs {
+	h1 {
+		text-align: center;
+	}
+	padding: 48px 70px 0;
+
+	.docs__intro {
+		border-bottom: $article-border-bottom;
+		padding-bottom: $space-between-article;
+
+		p {
+			text-indent: 40px;
+			line-height: 1.5;
+			margin-bottom: 15px;
+		}
+
+		ol > li {
+			margin-bottom: 5px;
+			color: $theme-color;
+			cursor: pointer;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.docs__NFT-necessary-programs {
+		border-bottom: $article-border-bottom;
+		padding-bottom: $space-between-article;
+
+		.necessary-programs__p {
+			text-indent: 40px;
+		}
+
+		ul {
+			margin-top: 10px;
+
+			& > li {
+				margin-bottom: 5px;
+
+				&:nth-child(4) {
+					p:nth-child(1) {
+						margin: 10px 0;
+					}
+
+					.necessary-programs__metaplex-install {
+						margin-top: 15px;
+						display: flex;
+						flex-direction: column;
+
+						span {
+							font-weight: bold;
+							margin-bottom: 10px;
+						}
+
+						a {
+							margin-bottom: 10px;
+						}
+
+						&:nth-child(1n) {
+							margin-bottom: 10px;
+						}
+					}
+				}
+			}
+		}
+	}
+}

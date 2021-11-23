@@ -1,0 +1,74 @@
+.docs__application-operation {
+	.application-operation__download {
+		margin-bottom: 40px;
+		h3 {
+			text-align: center;
+			margin-bottom: 15px;
+		}
+
+		div:not(:last-child) {
+			margin-bottom: 20px;
+		}
+	}
+	.application-operation__metadata {
+		.mark1 {
+			color: #e61244;
+		}
+		.mark2 {
+			color: #c912e6;
+		}
+	}
+	.application-operation__metadata,
+	.application-operation__outputImageConf,
+	.application-operation__assetsSlices {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		div:not(:last-child),
+		blockquote,
+		table {
+			margin-bottom: 20px;
+		}
+
+		h3 {
+			text-align: center;
+			margin-bottom: 15px;
+		}
+
+		table {
+			cursor: default;
+			text-align: center;
+			border-collapse: collapse;
+			caption {
+				margin-bottom: 20px;
+
+				.mark-as-bold {
+					font-weight: bold;
+				}
+
+				.config__section-name {
+					font-style: italic;
+				}
+			}
+
+			th,
+			td {
+				padding: 5px 10px;
+				border: 1px solid black;
+			}
+
+			&:nth-child(2) {
+				margin: 20px 0;
+			}
+		}
+	}
+
+	.application-operation__metadata {
+		margin-bottom: 40px;
+	}
+
+	.application-operation__outputImageConf {
+		margin-bottom: 40px;
+	}
+}

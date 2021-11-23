@@ -1,0 +1,32 @@
+.docs__candy-machine {
+	border-bottom: 1px solid #e3e3e3;
+	padding-bottom: 40px;
+
+	.information-block > p {
+		margin-bottom: 20px;
+	}
+	.candy__machine-item {
+		& > p:first-child {
+			margin-bottom: 5px;
+		}
+		margin-bottom: 15px;
+
+		&.illustration {
+			display: flex;
+			flex-direction: column;
+
+			img {
+				max-width: 500px;
+			}
+
+			.note {
+				margin-top: 10px;
+				background-color: #d2f0fc;
+				border-left: 3px solid #3f51b5;
+				padding: 20px 0 20px 15px;
+				max-width: 700px;
+				font-style: italic;
+			}
+		}
+	}
+}

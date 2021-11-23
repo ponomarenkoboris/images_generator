@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  server:
+    build: ./server
+    container_name: server
+    command: python ./server/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/server
+    ports:
+      - "8000:8000"
+  client:
+    build: ./client
+    container_name: client
+    volumes:
+      - .:/client
+    command: node ./client/clientServer.js
+    ports:
+      - "3000:3000"

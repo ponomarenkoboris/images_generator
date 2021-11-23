@@ -1,0 +1,31 @@
+.candy__setup {
+	display: flex;
+	justify-content: center;
+	position: relative;
+
+	form {
+		position: absolute;
+		top: 15vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		width: 60%;
+		z-index: 1;
+		background-color: #fff;
+
+		.candy__setup-form__item {
+			margin-bottom: 10px;
+		}
+
+		.candy__setup-actions {
+			margin-top: 30px;
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+
+	.open__setup-button {
+		position: absolute;
+		z-index: 1;
+	}
+}

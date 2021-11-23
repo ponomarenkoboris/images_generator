@@ -1,0 +1,47 @@
+.collecrables__setup-output__conf {
+	h2 {
+		margin-bottom: 30px;
+	}
+	.output__conf {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+
+		form {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 15px;
+			max-width: 435px;
+
+			.form__select.MuiFormControl-root {
+				width: 210px;
+			}
+		}
+	}
+}
+
+@media (max-width: 850px) {
+	.collecrables__setup-output__conf {
+		h2 {
+			text-align: center;
+		}
+		.output__conf {
+			flex-direction: column;
+
+			form {
+				margin-bottom: 30px;
+			}
+		}
+	}
+}
+
+@media (max-width: 815px) {
+	.collecrables__setup-output__conf {
+		flex-direction: column;
+
+		form {
+			margin-bottom: 30px;
+		}
+	}
+}

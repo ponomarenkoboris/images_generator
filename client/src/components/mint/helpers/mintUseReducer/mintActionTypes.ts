@@ -1,0 +1,10 @@
+type ActionTypes = Record<string, string>
+
+export const actionsType: ActionTypes = {
+    REFRESH_CANDY_MACHINE_STATE: 'REFRESH_CANDY_MACHINE_STATE',
+    SET_IS_SOLD_OUT: 'SET_IS_SOLD_OUT',
+    SET_BALANCE: 'SET_BALANCE',
+    SET_IS_MINTING: 'SET_IS_MINTING',
+    UPDATE_ALERT_STATE: 'UPDATE_ALERT_STATE',
+    UPDATE_IS_ACTIVE: 'UPDATE_IS_ACTIVE'
+}
