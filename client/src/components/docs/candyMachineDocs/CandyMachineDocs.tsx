@@ -1,16 +1,17 @@
 import candyMachineDirImage from '../../../assets/candy-cli.png'
 import candyDataImages from '../../../assets/candy_data.jpg'
 import candyStartImage from '../../../assets/starting_candy_machine.jpg'
-import { AppendRefCb } from '../Documentation'
 import { CodeBlock } from "../codeBlock/CodeBlock"
 import { scrollToElement } from '../helpers/utils'
+import type { AppendRefCb } from '../helpers/utils'
 import './CandyMachineDocs.scss'
 
 type CandyMachineDocsProps = {
     appendRefCb: AppendRefCb
+    refs: React.MutableRefObject<HTMLImageElement[]>
 }
 
-export const CandyMachineDocs = ({ appendRefCb }: CandyMachineDocsProps) => {
+const CandyMachineDocs = ({ appendRefCb, refs }: CandyMachineDocsProps) => {
     return (
         <div className='docs__candy-machine'>
             <h2 id='candy-machine'>Candy Machine для генерации NFT</h2>
@@ -40,7 +41,7 @@ export const CandyMachineDocs = ({ appendRefCb }: CandyMachineDocsProps) => {
                         src='img/1x1.png' 
                         alt="Workdir candy machine" 
                         loading='lazy' 
-                        ref={(el: HTMLImageElement) => appendRefCb(el)} 
+                        ref={(el: HTMLImageElement) => appendRefCb(el, refs)} 
                     />
                 </div>
                 <blockquote className="candy__machine-item note">
@@ -79,7 +80,7 @@ export const CandyMachineDocs = ({ appendRefCb }: CandyMachineDocsProps) => {
                     src='img/1x1.png'
                     alt='After creating candy machine'
                     loading='lazy'
-                    ref={(el: HTMLImageElement) => appendRefCb(el)}
+                    ref={(el: HTMLImageElement) => appendRefCb(el, refs)}
                 />
             </div>
             <div className="information-block">
@@ -94,7 +95,7 @@ export const CandyMachineDocs = ({ appendRefCb }: CandyMachineDocsProps) => {
                     src="img/1x1.png" 
                     alt="How to start minting"
                     loading='lazy'
-                    ref={(el: HTMLImageElement) => appendRefCb(el)}
+                    ref={(el: HTMLImageElement) => appendRefCb(el, refs)}
                 />
             </div>
             <div className="information-block">
@@ -105,3 +106,5 @@ export const CandyMachineDocs = ({ appendRefCb }: CandyMachineDocsProps) => {
         </div>
     )
 }
+
+export default CandyMachineDocs

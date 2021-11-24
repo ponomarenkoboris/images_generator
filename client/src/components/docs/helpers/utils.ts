@@ -1,5 +1,9 @@
 export const scrollToElement = (href: string) => document.querySelector(href)?.scrollIntoView()
 
+export type AppendRefCb = (el: HTMLImageElement, refs: React.MutableRefObject<HTMLImageElement[]>) => void
+
+export const appendRefCb: AppendRefCb = (el, refs) => { refs.current.push(el) }
+
 export const calculateRanderGenerator = (imagesRefs: React.MutableRefObject<HTMLImageElement[]>) => {
     let lazyImagesPositions: number[] = []
 

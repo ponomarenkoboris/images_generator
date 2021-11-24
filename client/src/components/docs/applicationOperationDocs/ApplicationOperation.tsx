@@ -1,16 +1,17 @@
-import { AppendRefCb } from '../Documentation'
 import { tokenMetadataTable, tokenMetadataCollectTable, tokenMetadatProperTable, algoConfTable } from './helpers/tableData'
 import outputImageConfImage from '../../../assets/output_image_config.jpg'
 import assetsSlicesImage from '../../../assets/slices.jpg'
 import tokenMetadataImage from '../../../assets/token_metadata.png'
 import downloadBtnImage from '../../../assets/download_from_server.jpg'
+import type { AppendRefCb } from '../helpers/utils'
 import './ApplicationOperation.scss'
 
 type ApplicationOperationDocsProps = {
     appendRefCb: AppendRefCb
+    refs: React.MutableRefObject<HTMLImageElement[]>
 }
 
-export const ApplicationOperationDocs = ({ appendRefCb }: ApplicationOperationDocsProps) => {
+const ApplicationOperationDocs = ({ appendRefCb, refs }: ApplicationOperationDocsProps) => {
     return (
         <div className='docs__application-operation'>
             <h2 id='application-operation'>Руководство по эсплуатации приложения</h2>
@@ -25,7 +26,7 @@ export const ApplicationOperationDocs = ({ appendRefCb }: ApplicationOperationDo
                         src="img/1x1.png" 
                         alt="Download from server" 
                         loading='lazy'
-                        ref={(el: HTMLImageElement) => appendRefCb(el)}
+                        ref={(el: HTMLImageElement) => appendRefCb(el, refs)}
                     />
                 </div>
                 <div className='information-block'>
@@ -43,7 +44,7 @@ export const ApplicationOperationDocs = ({ appendRefCb }: ApplicationOperationDo
                         src='img/1x1.png' 
                         alt="Token metadata example"
                         loading='lazy' 
-                        ref={(el: HTMLImageElement) => appendRefCb(el)} 
+                        ref={(el: HTMLImageElement) => appendRefCb(el, refs)} 
                     />
                 </div>
                 <blockquote className='note'>
@@ -145,7 +146,7 @@ export const ApplicationOperationDocs = ({ appendRefCb }: ApplicationOperationDo
                         src='img/1x1.png' 
                         alt="Algorithm setup" 
                         loading='lazy'
-                        ref={(el: HTMLImageElement) => appendRefCb(el)} 
+                        ref={(el: HTMLImageElement) => appendRefCb(el, refs)} 
                     />
                 </div>
                 <blockquote className='note'>
@@ -187,10 +188,12 @@ export const ApplicationOperationDocs = ({ appendRefCb }: ApplicationOperationDo
 						src='img/1x1.png' 
 						alt="Assets slices setup" 
 						loading='lazy' 
-						ref={(el: HTMLImageElement) => appendRefCb(el)} 
+						ref={(el: HTMLImageElement) => appendRefCb(el, refs)} 
 					/>
 				</div>
 			</div>
         </div>
     )
 }
+
+export default ApplicationOperationDocs

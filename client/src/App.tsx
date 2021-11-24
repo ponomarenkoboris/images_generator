@@ -7,7 +7,6 @@ import { clusterApiUrl } from '@solana/web3.js'
 import { getPhantomWallet, getSlopeWallet, getSolflareWallet, getSolletWallet, getSolletExtensionWallet } from '@solana/wallet-adapter-wallets'
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui'
-
 import './App.scss';
 const Documentation = React.lazy(() => import('./components/docs/Documentation'))
 const CreateCollectables = React.lazy(() => import('./components/collectionCreate/CreateCollectables'))

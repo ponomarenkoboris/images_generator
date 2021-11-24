@@ -2,10 +2,10 @@ import algTypes from './algorithmTypes'
 import { OutputImageConf, AlgoActionCreator, SizeValue } from './types'
 
 const initialState: OutputImageConf = {
-    images_count: 0,
+    images_count: 1,
     size: {
-        height: 0,
-        width: 0
+        height: 1416,
+        width: 672
     },
     time_limit: false,
     sequences_is_unique: false,
