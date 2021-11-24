@@ -1,4 +1,4 @@
 node_modules
 .gitignore
 README.md
-build
+.git

@@ -1,10 +1,12 @@
 FROM node:lts
 
 WORKDIR /client
+COPY package.json /client/
+RUN yarn
 
-COPY . /client/
-RUN yarn && yarn build
+COPY . .
+RUN yarn build
 
 EXPOSE 3000
 
-CMD ["node", "clientServer.js"]
+CMD ["yarn", "start:server"]
