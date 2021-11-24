@@ -3,3 +3,4 @@ venv
 images
 assets
 db.sqlite3
+.git
