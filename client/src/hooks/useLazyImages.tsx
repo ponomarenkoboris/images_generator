@@ -1,14 +1,11 @@
-export const scrollToElement = (href: string) => document.querySelector(href)?.scrollIntoView()
+import { useEffect, useRef } from 'react'
 
-export type AppendRefCb = (el: HTMLImageElement, refs: React.MutableRefObject<HTMLImageElement[]>) => void
-
-export const appendRefCb: AppendRefCb = (el, refs) => { refs.current.push(el) }
-
-export const calculateRanderGenerator = (imagesRefs: React.MutableRefObject<HTMLImageElement[]>) => {
+const calculateRanderGenerator = (imagesRefs: React.MutableRefObject<HTMLImageElement[]>) => {
     let lazyImagesPositions: number[] = []
 
     if (imagesRefs.current.length > 0) {
         imagesRefs.current.forEach(img => {
+            if (!img) return
             lazyImagesPositions.push(img.getBoundingClientRect().top)
             lazyImagesCheck()
         })
@@ -23,7 +20,7 @@ export const calculateRanderGenerator = (imagesRefs: React.MutableRefObject<HTML
     function lazyImagesCheck() {
         const idx = findIndex(0, lazyImagesPositions, window.scrollY)
         if (idx >= 0) {
-            if (imagesRefs.current[idx].dataset.src) {
+            if (imagesRefs.current[idx] && imagesRefs.current[idx].dataset.src) {
                 imagesRefs.current[idx].src = imagesRefs.current[idx].dataset.src as string
                 imagesRefs.current[idx].removeAttribute('data-src')
             }
@@ -31,4 +28,17 @@ export const calculateRanderGenerator = (imagesRefs: React.MutableRefObject<HTML
     }
 
     return () => lazyImagesCheck()
+}
+
+type AppendImage = (el: HTMLImageElement) => void
+
+export const useLazyLoad = (): AppendImage => {
+    const imagesRefs = useRef<HTMLImageElement[]>([])
+    useEffect(() => {
+        const calculateRender = calculateRanderGenerator(imagesRefs)
+        window.addEventListener('scroll', calculateRender)
+        return () => window.removeEventListener('scroll', calculateRender)
+    })
+
+    return (el: HTMLImageElement) => { imagesRefs.current.push(el) }
 }

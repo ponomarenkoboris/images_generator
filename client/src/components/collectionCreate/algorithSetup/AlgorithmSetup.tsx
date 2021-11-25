@@ -7,7 +7,7 @@ import {
     updateSequencesUnique, 
     updateBackgroundColor
 } from '../../../store/algorithmSetupStore/algorithmActionCreators'
-import { toNumberValue } from '../helpers/utils'
+import { toNumberValue, validateConf } from '../helpers/utils'
 import { TextField, Button,FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import request, { endpoints } from '../../../http-conf/request'
 import './AlgorithmSetup.scss'
@@ -80,6 +80,7 @@ export const AlgorithmSetup = () => {
                     <Button
                         variant='contained'
                         color='primary'
+                        disabled={!!validateConf(algConf)}
                         onClick={saveOutputConf}
                     >
                         Сохранить настройки алгоритма

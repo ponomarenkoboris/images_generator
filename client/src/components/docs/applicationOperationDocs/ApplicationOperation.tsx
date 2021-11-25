@@ -3,15 +3,12 @@ import outputImageConfImage from '../../../assets/output_image_config.jpg'
 import assetsSlicesImage from '../../../assets/slices.jpg'
 import tokenMetadataImage from '../../../assets/token_metadata.png'
 import downloadBtnImage from '../../../assets/download_from_server.jpg'
-import type { AppendRefCb } from '../helpers/utils'
+import { useLazyLoad } from '../../../hooks/useLazyImages'
 import './ApplicationOperation.scss'
 
-type ApplicationOperationDocsProps = {
-    appendRefCb: AppendRefCb
-    refs: React.MutableRefObject<HTMLImageElement[]>
-}
+const ApplicationOperationDocs = () => {
+    const appendImage = useLazyLoad()
 
-const ApplicationOperationDocs = ({ appendRefCb, refs }: ApplicationOperationDocsProps) => {
     return (
         <div className='docs__application-operation'>
             <h2 id='application-operation'>Руководство по эсплуатации приложения</h2>
@@ -26,7 +23,7 @@ const ApplicationOperationDocs = ({ appendRefCb, refs }: ApplicationOperationDoc
                         src="img/1x1.png" 
                         alt="Download from server" 
                         loading='lazy'
-                        ref={(el: HTMLImageElement) => appendRefCb(el, refs)}
+                        ref={(el: HTMLImageElement) => appendImage(el)}
                     />
                 </div>
                 <div className='information-block'>
@@ -44,7 +41,7 @@ const ApplicationOperationDocs = ({ appendRefCb, refs }: ApplicationOperationDoc
                         src='img/1x1.png' 
                         alt="Token metadata example"
                         loading='lazy' 
-                        ref={(el: HTMLImageElement) => appendRefCb(el, refs)} 
+                        ref={(el: HTMLImageElement) => appendImage(el)} 
                     />
                 </div>
                 <blockquote className='note'>
@@ -146,7 +143,7 @@ const ApplicationOperationDocs = ({ appendRefCb, refs }: ApplicationOperationDoc
                         src='img/1x1.png' 
                         alt="Algorithm setup" 
                         loading='lazy'
-                        ref={(el: HTMLImageElement) => appendRefCb(el, refs)} 
+                        ref={(el: HTMLImageElement) => appendImage(el)} 
                     />
                 </div>
                 <blockquote className='note'>
@@ -188,7 +185,7 @@ const ApplicationOperationDocs = ({ appendRefCb, refs }: ApplicationOperationDoc
 						src='img/1x1.png' 
 						alt="Assets slices setup" 
 						loading='lazy' 
-						ref={(el: HTMLImageElement) => appendRefCb(el, refs)} 
+						ref={(el: HTMLImageElement) => appendImage(el)} 
 					/>
 				</div>
 			</div>

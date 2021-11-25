@@ -1,24 +1,23 @@
 import candyMachineDirImage from '../../../assets/candy-cli.png'
 import candyDataImages from '../../../assets/candy_data.jpg'
 import candyStartImage from '../../../assets/starting_candy_machine.jpg'
+import { useLazyLoad } from '../../../hooks/useLazyImages'
 import { CodeBlock } from "../codeBlock/CodeBlock"
-import { scrollToElement } from '../helpers/utils'
-import type { AppendRefCb } from '../helpers/utils'
 import './CandyMachineDocs.scss'
 
-type CandyMachineDocsProps = {
-    appendRefCb: AppendRefCb
-    refs: React.MutableRefObject<HTMLImageElement[]>
-}
+const scrollToElement = (href: string) => document.querySelector(href)?.scrollIntoView()
 
-const CandyMachineDocs = ({ appendRefCb, refs }: CandyMachineDocsProps) => {
+const CandyMachineDocs = () => {
+    const appendImage = useLazyLoad()
+
     return (
         <div className='docs__candy-machine'>
             <h2 id='candy-machine'>Candy Machine для генерации NFT</h2>
             <div className="information-block">
                 <p>
                     Прежде чем перейти к созданию Candy Machine, убедитесь, что вы установили 
-                    <span onClick={() => scrollToElement('#NFT-necessary-programs')}>{" "}этот список программ</span>.
+                    <span onClick={() => scrollToElement('#NFT-necessary-programs')}>{" "}этот список программ</span>. 
+                    С полным списокм команд можно знакомиться <a href="https://github.com/metaplex-foundation/metaplex/blob/a733ebb2262da68d3400f96861fe6ad199e48c3c/js/packages/cli/README.md">здесь</a>.
                 </p>
             </div>
             <div className='candy__machine-item'>
@@ -41,7 +40,7 @@ const CandyMachineDocs = ({ appendRefCb, refs }: CandyMachineDocsProps) => {
                         src='img/1x1.png' 
                         alt="Workdir candy machine" 
                         loading='lazy' 
-                        ref={(el: HTMLImageElement) => appendRefCb(el, refs)} 
+                        ref={(el: HTMLImageElement) => appendImage(el)} 
                     />
                 </div>
                 <blockquote className="candy__machine-item note">
@@ -80,7 +79,7 @@ const CandyMachineDocs = ({ appendRefCb, refs }: CandyMachineDocsProps) => {
                     src='img/1x1.png'
                     alt='After creating candy machine'
                     loading='lazy'
-                    ref={(el: HTMLImageElement) => appendRefCb(el, refs)}
+                    ref={(el: HTMLImageElement) => appendImage(el)}
                 />
             </div>
             <div className="information-block">
@@ -95,7 +94,7 @@ const CandyMachineDocs = ({ appendRefCb, refs }: CandyMachineDocsProps) => {
                     src="img/1x1.png" 
                     alt="How to start minting"
                     loading='lazy'
-                    ref={(el: HTMLImageElement) => appendRefCb(el, refs)}
+                    ref={(el: HTMLImageElement) => appendImage(el)}
                 />
             </div>
             <div className="information-block">

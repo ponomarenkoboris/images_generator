@@ -35,9 +35,10 @@ const convertAssets = (filesList: File[]): Promise<Asset[]> => {
 export const validateAssetName = (name: string): boolean => `${name}`.match(/#\d+.png$/) ? true : false
 export const toNumberValue = (value: string): number => isNaN(parseInt(value)) ? 0 : parseInt(value)
 
-const validateConf = (data: object, result?: boolean): boolean | void => { 
+export const validateConf = (data: object, result?: boolean): boolean | void => { 
     Object.values(data).forEach(value => {
         if (typeof value !== 'boolean' && !value) result = true
+        if (typeof value === 'string' && value.match(/0\d/)) result = true
         if (Array.isArray(value)) {
             if (value.length === 0) result = true
             value.forEach(item => validateConf(item))
@@ -52,13 +53,7 @@ const generatorAvaliable = (conf: RequestConfig): boolean => {
     let isDisabled: boolean = false
     const { metadata, assetsSlices, outputConf } = conf
     
-    isDisabled = validateConf(metadata) as boolean
-    
-    if (isDisabled) return isDisabled
-
-    isDisabled = validateConf(outputConf) as boolean
-
-    if (isDisabled) return isDisabled
+    if (validateConf(metadata) || validateConf(outputConf)) return true
 
     if (assetsSlices.length !== 0) { 
         const folderNames: string[] = []

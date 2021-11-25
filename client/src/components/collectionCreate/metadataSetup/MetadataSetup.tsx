@@ -16,7 +16,7 @@ import { TokenMetadata } from '../../../store/metadataStore/types'
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, IconButton } from "@material-ui/core"
 import BackspaceIcon from '@material-ui/icons/Backspace';
 import request, { endpoints } from '../../../http-conf/request'
-import { toNumberValue } from '../helpers/utils'
+import { toNumberValue, validateConf } from '../helpers/utils'
 import './MetadataSetup.scss'
 
 export const MetadataSetup = () => {
@@ -25,7 +25,7 @@ export const MetadataSetup = () => {
     const dispatch = useDispatch()
 
     const saveMetadata = async () => {
-        const metadata = Object.assign({}, tokenMetadata)
+        const metadata = tokenMetadata
         metadata.properties.creators = metadata.properties.creators.map(({ address, share }) => ({ address, share }))
         try {
             await request.post(endpoints.metadata, metadata)
@@ -121,6 +121,7 @@ export const MetadataSetup = () => {
                     <Button
                         variant='contained'
                         color='primary'
+                        disabled={!!validateConf(tokenMetadata)}
                         onClick={saveMetadata}
                     >
                         Сохранить настройки метадаты

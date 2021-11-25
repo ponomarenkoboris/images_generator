@@ -9,12 +9,14 @@
 		margin-bottom: 30px;
 		.assets__header {
 			display: flex;
+			flex-direction: column;
 			align-items: center;
 			justify-content: space-between;
 			margin-bottom: 30px;
 
 			.append__bottom {
 				height: 36.5px;
+				margin-top: 10px;
 			}
 		}
 
@@ -22,8 +24,6 @@
 			display: flex;
 
 			.assets__list {
-				// width: 500px;
-
 				.file__wrapper {
 					padding: 20px 0;
 					display: flex;
@@ -92,14 +92,6 @@
 @media (max-width: 850px) {
 	.assets__slices {
 		flex-direction: column;
-
-		.assets__header {
-			flex-direction: column;
-
-			h2 {
-				margin-bottom: 10px;
-			}
-		}
 	}
 }
 

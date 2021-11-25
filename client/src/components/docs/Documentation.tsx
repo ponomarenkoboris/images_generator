@@ -1,21 +1,15 @@
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
 import { CodeBlock } from './codeBlock/CodeBlock'
 import metaplexInstallImage from '../../assets/metaplex-install.png'
-import { calculateRanderGenerator, scrollToElement, appendRefCb } from './helpers/utils'
+import { useLazyLoad } from '../../hooks/useLazyImages'
 import './Documentation.scss'
 const CandyMachineDocs = React.lazy(() => import('./candyMachineDocs/CandyMachineDocs'))
 const ApplicationOperationDocs = React.lazy(() => import('./applicationOperationDocs/ApplicationOperation'))
 
+const scrollToElement = (href: string) => document.querySelector(href)?.scrollIntoView()
+
 const Documentation = () => {
-    const imagesRefs = useRef<HTMLImageElement[]>([]);
-
-    useEffect(() => {
-        const calculateRender = calculateRanderGenerator(imagesRefs)
-        window.addEventListener('scroll', calculateRender)
-        return () => window.removeEventListener('scroll', calculateRender)
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const appendImage = useLazyLoad()
 
     return (
         <div className='docs'>
@@ -77,10 +71,10 @@ const Documentation = () => {
                             <div className='image__wrapper'>
                                 <img 
                                     data-src={metaplexInstallImage} 
-                                    src='img/1x1.png' 
+                                    src='img/1x1.png'
                                     alt="Download metaplex" 
                                     loading='lazy' 
-                                    ref={(el: HTMLImageElement) => appendRefCb(el, imagesRefs)} 
+                                    ref={(el: HTMLImageElement) => appendImage(el)} 
                                 />
                             </div>
                         </div>
@@ -93,8 +87,8 @@ const Documentation = () => {
                     </li>
                 </ul>
             </div>
-            <ApplicationOperationDocs appendRefCb={appendRefCb} refs={imagesRefs}/>
-            <CandyMachineDocs appendRefCb={appendRefCb} refs={imagesRefs}/>
+            <ApplicationOperationDocs />
+            <CandyMachineDocs />
         </div>
     )
 }
