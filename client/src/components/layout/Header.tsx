@@ -15,7 +15,7 @@ const Header = () => {
     const [pathname, setPathname] = useState(history.location.pathname)
 
     useEffect(() => {
-        if (pathname === '/') {
+        if (pathname !== Routes.DOCS && pathname !== Routes.MINT && pathname !== Routes.GENERATE_COLLECTION) {
             history.push(Routes.DOCS)
             setPathname(Routes.DOCS)
         }
@@ -38,7 +38,7 @@ const Header = () => {
                                 onChange={changeRoute}
                             >
                                 <Tab label="Docs" value={Routes.DOCS} />
-                                <Tab label="Genrate collection" value={Routes.GENERATE_COLLECTION} />
+                                <Tab label="Generate collection" value={Routes.GENERATE_COLLECTION} />
                                 <Tab label="Mint NFT" value={Routes.MINT} />
                             </TabList>
                         </TabContext>

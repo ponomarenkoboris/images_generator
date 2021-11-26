@@ -32,13 +32,32 @@ const convertAssets = (filesList: File[]): Promise<Asset[]> => {
     })
 }
 
-export const validateAssetName = (name: string): boolean => `${name}`.match(/#\d+.png$/) ? true : false
+export const validateAssetName = (name: string): boolean => `${name}`.match(/#\d+\.png$/) ? true : false
 export const toNumberValue = (value: string): number => isNaN(parseInt(value)) ? 0 : parseInt(value)
 
 export const validateConf = (data: object, result?: boolean): boolean | void => { 
-    Object.values(data).forEach(value => {
+    // TODO rewrite algorithm usinf for loop
+    // const entries = Object.entries(data)
+    // for (let i = 0; i < entries.length; i++) {
+    //     const [key, value] = entries[i] as [string, any]
+
+    //     if (typeof value !== 'boolean' && !value) return true
+    //     if (typeof value === 'string' && value.match(/0\d/)) return true
+    //     if (key === 'backgroud_color_rgba') {
+    //         const arr = value.split(',')
+    //         const reducer = (acc: string | boolean, curr: string): string | boolean => !acc ? acc : curr.match(/\d+/)?.[0] === curr
+    //         if (arr.length !== 4 || arr.reduce(reducer, arr[0])) return true
+    //     }
+    // }
+
+    Object.entries(data).forEach(([key, value]) => {
         if (typeof value !== 'boolean' && !value) result = true
         if (typeof value === 'string' && value.match(/0\d/)) result = true
+        if (key === 'backgroud_color_rgba') {
+            const arr = value.split(',')
+            const reducer = (acc: string | boolean, curr: string): string | boolean => !acc ? acc : curr.match(/\d+/)?.[0] === curr
+            if (arr.length !== 4 || arr.reduce(reducer, arr[0])) result = true
+        }
         if (Array.isArray(value)) {
             if (value.length === 0) result = true
             value.forEach(item => validateConf(item))
