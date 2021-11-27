@@ -12,14 +12,17 @@ enum Routes {
 
 const Header = () => {
     const history = useHistory()
-    const [pathname, setPathname] = useState(history.location.pathname)
+    const [pathname, setPathname] = useState(history.location.pathname === '/' ? Routes.DOCS : history.location.pathname)
 
     useEffect(() => {
-        if (pathname !== Routes.DOCS && pathname !== Routes.MINT && pathname !== Routes.GENERATE_COLLECTION) {
+        if (history.location.pathname !== Routes.DOCS && 
+            history.location.pathname !== Routes.MINT && 
+            history.location.pathname !== Routes.GENERATE_COLLECTION
+        ) {
             history.push(Routes.DOCS)
             setPathname(Routes.DOCS)
         }
-    }, [pathname, history])
+    }, [history])
 
     const changeRoute = (e: React.ChangeEvent<{}>, pathname: string) => {
         history.push(pathname)
@@ -31,7 +34,7 @@ const Header = () => {
             <nav>
                 <Box sx={{ width: '100%' }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <TabContext value={history.location.pathname}>
+                        <TabContext value={pathname}>
                             <TabList 
                                 textColor="primary"
                                 indicatorColor="primary"

@@ -1,6 +1,8 @@
-import { validateAssetName, toNumberValue, validateConf } from '../utils'
+import { OutputImageConf } from '../../../../store/algorithmSetupStore/types'
+import { TokenMetadata } from '../../../../store/metadataStore/types'
+import { validateAssetName, toNumberValue, validateConf, convertAssets } from '../utils'
 
-const metadata = {
+const metadata: TokenMetadata = {
     name: 'Name',
     symbol: 'SYMB',
     description: 'Some description',
@@ -20,7 +22,7 @@ const metadata = {
     }
 }
 
-const algConf = {
+const algConf: OutputImageConf = {
     images_count: 1,
     size: {
         height: 1416,
@@ -71,13 +73,13 @@ describe('Testing collection create utils', () => {
     it('should validate algoritm configuration', () => {
         expect(validateConf(algConf)).toBe(undefined)
         expect(validateConf({ ...algConf, images_count: 0 })).toBe(true)
-        expect(validateConf({ ...algConf, time_limit: '' })).toBe(true)
-        expect(validateConf({ ...algConf, sequences_is_unique: '' })).toBe(true)
+        expect(validateConf({ ...algConf, time_limit: false })).toBe(undefined)
+        expect(validateConf({ ...algConf, sequences_is_unique: false })).toBe(undefined)
         expect(validateConf({ ...algConf, backgroud_color_rgba: '' })).toBe(true)
         expect(validateConf({ ...algConf, backgroud_color_rgba: '0' })).toBe(true)
         expect(validateConf({ ...algConf, backgroud_color_rgba: '0, 0, 0' })).toBe(true)
         expect(validateConf({ ...algConf, backgroud_color_rgba: '0, 0, 0, 255' })).toBe(undefined)
-        expect(validateConf({ ...algConf, backgroud_color_rgba: '0, dkdkd, 0, 255' })).toBe(undefined) // TODO not correct
+        expect(validateConf({ ...algConf, backgroud_color_rgba: '0, dkdkd, 0, 255' })).toBe(true)
         expect(validateConf({ ...algConf, size: { height: 0, width: 616 } })).toBe(true)
         expect(validateConf({ ...algConf, size: { height: 1416, width: 0 } })).toBe(true)
     })
