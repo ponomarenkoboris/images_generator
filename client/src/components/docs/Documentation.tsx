@@ -52,10 +52,14 @@ const Documentation = () => {
                         
                     </li>
                     <li>
-                        <a target="_blanc" rel="noreferrer" href='https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable'>yarn</a>
+                        <p>
+                            <a target="_blanc" rel="noreferrer" href='https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable'>yarn</a>
+                        </p>
+                        <CodeBlock>npm install -g yarn</CodeBlock>
                     </li>
                     <li>
                         <a target="_blanc" rel="noreferrer" href='https://www.npmjs.com/package/ts-node'>ts-node</a>
+                        <CodeBlock>npm install -g ts-node</CodeBlock>
                     </li>
                     <li>
                         <a target="_blanc" rel="noreferrer" href='https://docs.metaplex.com/'>Metaplex</a>

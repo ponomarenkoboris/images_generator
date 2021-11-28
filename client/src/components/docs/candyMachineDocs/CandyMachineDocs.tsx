@@ -102,6 +102,10 @@ const CandyMachineDocs = () => {
                     Далее, необходимо подключить крипто кошелек. После чего можно будет чеканить NFT арты.
                 </p>
             </div>
+            <div className='candy__machine-item'>
+                <p>Чтобы сгенерировать необходимое колличество NFT из консоли, необходимо ввести следющую команду:</p>
+                <CodeBlock>ts-node ./src/candy-machine-cli.ts mint_multiple_tokens -k path_to_keypair -n number_of_NFT`s</CodeBlock>
+            </div>
         </div>
     )
 }
