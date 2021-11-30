@@ -57,8 +57,8 @@ export const MetadataSetup = () => {
                     <TextField
                         label='Процнет с прожади создателям (seller_fee_basis_points)'
                         type='number'
-                        value={tokenMetadata.seller_fee_basis_points}
-                        onChange={e => dispatch(changeSeller(toNumberValue(e.target.value)))}
+                        value={tokenMetadata.seller_fee_basis_points || ''}
+                        onChange={e => dispatch(changeSeller(toNumberValue(e.target.value || '0')))}
                     />
                     <TextField
                         label='Имя коллекции (collection.name)'
@@ -96,8 +96,8 @@ export const MetadataSetup = () => {
                                 <TextField 
                                     label='Процент создателя (creator.share)'
                                     type='number'
-                                    value={share}
-                                    onChange={(e) => id && dispatch(changePropertyCreators(id, false, toNumberValue(e.target.value)))}
+                                    value={share || ''}
+                                    onChange={(e) => id && dispatch(changePropertyCreators(id, false, toNumberValue(e.target.value || '0')))}
                                 />
                             </div>
                             <div className='creator__action'>

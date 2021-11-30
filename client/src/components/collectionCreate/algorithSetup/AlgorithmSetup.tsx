@@ -34,15 +34,15 @@ export const AlgorithmSetup = () => {
                         variant='outlined'
                         label='Колличество изображений'
                         type='number'
-                        value={algConf.images_count}
-                        onChange={(e) => dispatch(updateImagesCount(toNumberValue(e.target.value)))}
+                        value={algConf.images_count || ''}
+                        onChange={(e) => dispatch(updateImagesCount(toNumberValue(e.target.value || '0')))}
                     />
                     <TextField
                         variant='outlined'
                         label='Ширина'
                         type='number'
-                        value={algConf.size.width}
-                        onChange={(e) => dispatch(updateSize(false, toNumberValue(e.target.value)))}
+                        value={algConf.size.width || ''}
+                        onChange={(e) => dispatch(updateSize(false, toNumberValue(e.target.value || '0')))}
                     />
                     <TextField 
                         variant='outlined'
