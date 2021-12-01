@@ -22,13 +22,13 @@
         }
     },
     "output_image_configuration": {
-        "images_count": 100,
+        "images_count": 1000,
         "size": {
             "width": 1416,
             "height": 672
         },
         "time_limit": false,
-        "sequences_is_unique": true,
+        "sequences_is_unique": false,
         "backgroud_color_rgba": [0, 0, 0, 250]
     }
 }

@@ -1,4 +1,4 @@
-import os
+import os, json
 from PIL import Image
 
 IMAGE_ROOT = os.path.join(os.path.abspath(os.path.join('images')))
@@ -28,18 +28,25 @@ def merge_images(filename=None, data=None, output=None, conf=None):
 
     images = []
 
-    for section, value in data.items():
-        images_list = os.listdir(os.path.join(IMAGE_ROOT, section))
-        images.append([section, find_item(value, images_list)])
-
     new_image = Image.new(
         mode='RGBA',
         size=(conf['size']['width'], conf['size']['height']),
         color=tuple(conf['backgroud_color_rgba'])
     )
 
+    for section, value in data.items():
+        images_list = os.listdir(os.path.join(IMAGE_ROOT, section))
+        images.append([section, find_item(value, images_list)])
+
     for section, image in images:
         img = Image.open(os.path.join(IMAGE_ROOT, section, image))
         new_image.paste(img, (0, 0), img)
 
     new_image.save(f'{output}/{filename}.png', 'PNG')
+
+def write_smart_contact(path, name, settings):
+    try:
+        with open(os.path.join(path, name), 'w') as fs:
+            json.dump(settings, fs, indent=4)
+    except:
+        raise Exception('Something went wrong while trying to write .json file for an image.')

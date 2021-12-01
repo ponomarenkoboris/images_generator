@@ -1,4 +1,4 @@
-import os, json
+import os, json, time
 from image_generator.generator import RandomImageGenerator
 
 if __name__ == '__main__':
@@ -14,6 +14,7 @@ if __name__ == '__main__':
         raise Exception('Something went wrong while trying to read configuration file')
 
     images_dir_list = os.listdir(os.path.join('images'))
+    start_time = time.time()
     generator = RandomImageGenerator(
         images_dir_list=images_dir_list,
         token_metadata=metadata,
@@ -21,3 +22,4 @@ if __name__ == '__main__':
     )
     generator.generate(images_count, is_uniques, time_limit)
     generator.draw_images()
+    print(f'Stop. Working time: {round(time.time() - start_time, 5)}')

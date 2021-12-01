@@ -1,5 +1,6 @@
-import random, os, shutil, json, time
-from .merge_images import merge_images
+import random, os, shutil, json, time, threading
+# from .merge_images import merge_images
+from .utils import merge_images, write_smart_contact
 
 PATH_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../')
 
@@ -13,7 +14,7 @@ class RandomImageGenerator:
         result = random.choices(images, weights=weights)[0]
         return result, str(images.index(result))
 
-    def __calculate_max_sequencies_count(self):
+    def __calculate_max_sequences_count(self):
         total_sequence_amount = 0
         for image_dir in self.images_dir:
             variants_count = len(os.listdir(os.path.join(PATH_ROOT, 'images', image_dir)))
@@ -25,15 +26,15 @@ class RandomImageGenerator:
         self.images_dir = images_dir_list
         self.__metadata = token_metadata
         self.__output_config = output_config
-        self.__max_sequences_count = self.__calculate_max_sequencies_count()
+        self.__max_sequences_count = self.__calculate_max_sequences_count()
 
     @property
     def content(self):
         return self.__content
 
-    def generate(self, count = 1, sequences_is_unique = True, generator_time_limit = False):
+    def generate(self, count=1, sequences_is_unique=True, generator_time_limit=False):
         content = []
-        timeout = time.time() + generator_time_limit if generator_time_limit != False else None
+        timeout = time.time() + generator_time_limit if generator_time_limit is not False else None
 
         while count > 0:
             if len(self.__sequences) >= self.__max_sequences_count and sequences_is_unique:
@@ -83,47 +84,45 @@ class RandomImageGenerator:
 
         os.mkdir(dist_dir)
 
-        counter = 0
         output_path = os.path.join(PATH_ROOT, 'assets')
 
         if self.__metadata is None:
             raise Exception(f'Missing token metadata. {os.path.join(PATH_ROOT, "root_configuration.json")}')
 
-        for image_settings in self.__content:
+        threads = []
+        for i in range(len(self.__content)):
             settings = {}
 
-            merge_images(
-                filename=counter,
-                data=image_settings,
-                output=output_path,
-                conf=self.__output_config
+            t1 = threading.Thread(
+                target=merge_images,
+                args=(i, self.__content[i], output_path, self.__output_config)
             )
+
+            t1.start()
+            threads.append(t1)
 
             for section, value in self.__metadata.items():
                 settings[section] = value
                 if section == 'symbol':
-                    settings[section] = f'{value}-{counter}'
+                    settings[section] = f'{value}-{i}'
 
                 if section == 'name':
-                    settings[section] += f' #{counter}'
+                    settings[section] += f' #{i}'
 
                 if section == "image":
-                    settings[section] = f'{counter}.png'
+                    settings[section] = f'{i}.png'
 
                 if section == 'properties':
-                    settings[section]["files"] = [{"uri": f'{counter}.png', "type": "image/png"}]
+                    settings[section]["files"] = [{"uri": f'{i}.png', "type": "image/png"}]
 
                 if section == 'attributes':
                     settings[section] = [
-                        {'trait_type': trait_type, 'value': value} for trait_type, value in image_settings.items()
+                        {'trait_type': trait_type, 'value': value} for trait_type, value in self.__content[i].items()
                     ]
 
-            try:
-                with open(os.path.join(output_path, f'{counter}.json'), 'w') as fs:
-                    json.dump(settings, fs, indent=4)
-            except:
-                raise Exception('Something went wrong while trying to write .json file for an image.')
+            t2 = threading.Thread(target=write_smart_contact, args=(output_path, f'{i}.json', settings))
+            t2.start()
+            threads.append(t2)
 
-            counter += 1
-
-        return 'Success!'
+        [t.join() for t in threads]
+        return 'Done!'
