@@ -1,5 +1,5 @@
-import random, os, shutil, json, time
-from .merge_images import merge_images
+import random, os, shutil, time, threading
+from .utils import merge_images, write_smart_contact
 
 PATH_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../')
 
@@ -31,9 +31,9 @@ class RandomImageGenerator:
     def content(self):
         return self.__content
 
-    def generate(self, count = 1, sequences_is_unique = True, generator_time_limit = False):
+    def generate(self, count=1, sequences_is_unique=True, generator_time_limit=False):
         content = []
-        timeout = time.time() + generator_time_limit if generator_time_limit != False else None
+        timeout = time.time() + generator_time_limit if generator_time_limit is not False else None
 
         while count > 0:
             if len(self.__sequences) >= self.__max_sequences_count and sequences_is_unique:
@@ -83,44 +83,45 @@ class RandomImageGenerator:
 
         os.mkdir(dist_dir)
 
-        counter = 0
-
         if self.__metadata is None:
             raise Exception(f'Missing token metadata. {os.path.join("root_configuration.json")}')
 
-        for image_settings in self.__content:
+        threads = []
+        for i in range(len(self.__content)):
             settings = {}
-            merge_images(
-                filename=counter,
-                data=image_settings,
-                output=dist_dir,
-                conf=self.__output_config
+
+            t1 = threading.Thread(
+                target=merge_images,
+                args=(i, self.__content[i], dist_dir, self.__output_config)
             )
+            t1.start()
+            threads.append(t1)
 
             for section, value in self.__metadata.items():
                 settings[section] = value
                 if section == 'symbol':
-                    settings[section] = f'{value}-{counter}'
+                    settings[section] = f'{value}-{i}'
 
                 if section == 'name':
-                    settings[section] += f' #{counter}'
+                    settings[section] += f' #{i}'
 
                 if section == "image":
-                    settings[section] = f'{counter}.png'
+                    settings[section] = f'{i}.png'
 
                 if section == 'properties':
-                    settings[section]["files"] = [{"uri": f'{counter}.png', "type": "image/png"}]
+                    settings[section]["files"] = [{"uri": f'{i}.png', "type": "image/png"}]
 
                 if section == 'attributes':
                     settings[section] = [
-                        {'trait_type': trait_type, 'value': value} for trait_type, value in image_settings.items()
+                        {'trait_type': trait_type, 'value': value} for trait_type, value in self.__content[i].items()
                     ]
-            try:
-                with open(os.path.join(dist_dir, f'{counter}.json'), 'w') as fs:
-                    json.dump(settings, fs, indent=4)
-            except:
-                raise Exception('Something went wrong while trying to write .json file for an image.')
 
-            counter += 1
+            t2 = threading.Thread(
+                target=write_smart_contact,
+                args=(os.path.join(dist_dir, f'{i}.json'), settings)
+            )
+            t2.start()
+            threads.append(t2)
 
+        [t.join() for t in threads]
         return 'Success!'

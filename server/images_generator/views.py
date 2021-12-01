@@ -144,12 +144,10 @@ class GetConf(APIView):
 
         response_data = {}
 
-        token_metadata = models.TokenMetadata.objects.all()
-        token_metadata = serializers.MetadataSerializer(token_metadata, many=True).data
+        token_metadata = serializers.MetadataSerializer(models.TokenMetadata.objects.all(), many=True).data
         response_data['metadata'] = token_metadata[0] if len(token_metadata) != 0 else None
 
-        conf = models.AlgorithmConfig.objects.all()
-        conf = serializers.AlgorithmSerializer(conf, many=True).data
+        conf = serializers.AlgorithmSerializer(models.AlgorithmConfig.objects.all(), many=True).data
         response_data['outputConf'] = conf[0] if len(conf) != 0 else None
 
         folders = []
@@ -162,14 +160,13 @@ class GetConf(APIView):
                 status=status.HTTP_200_OK
             )
 
-        count = 0
-        for folder_name in folders_names:
-            folder = {'id': count + 1, 'folderName': folder_name}
+        for i in range(len(folders_names)):
+            folder = {'id': i + 1, 'folderName': folders_names[i]}
 
             assets = []
             asset_count = 0
-            for asset_name in os.listdir(os.path.join(images_folder_abs_path, folder_name)):
-                encoded = base64.b64encode(open(os.path.join(images_folder_abs_path, folder_name, asset_name), 'rb').read()).decode('ascii')
+            for asset_name in os.listdir(os.path.join(images_folder_abs_path, folders_names[i])):
+                encoded = base64.b64encode(open(os.path.join(images_folder_abs_path, folders_names[i], asset_name), 'rb').read()).decode('ascii')
                 assets.append({
                     'id': asset_count + 1,
                     'url': 'data:image/png;base64,{}'.format(encoded),
@@ -179,7 +176,6 @@ class GetConf(APIView):
 
             folder['assets'] = assets
             folders.append(folder)
-            count += 1
 
         response_data['assetsSlices'] = folders
 

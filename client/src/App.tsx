@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import Header from './components/layout/Header'
+import Header from './shared'
 import useCandyConf from "./hooks/useCandyConf"
 import { useMemo } from "react"
 import { clusterApiUrl } from '@solana/web3.js'
@@ -8,9 +8,9 @@ import { getPhantomWallet, getSlopeWallet, getSolflareWallet, getSolletWallet, g
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui'
 import './App.scss';
-const Documentation = React.lazy(() => import('./components/docs/Documentation'))
-const CreateCollectables = React.lazy(() => import('./components/collectionCreate/CreateCollectables'))
-const Mint = React.lazy(() => import('./components/mint/Mint'))
+const Documentation = React.lazy(() => import('./Documentation'))
+const CreateCollectables = React.lazy(() => import('./CreateCollectables'))
+const Mint = React.lazy(() => import('./Mint'))
 
 const App = () => {
     const machineConf = useCandyConf()
