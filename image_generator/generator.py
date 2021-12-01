@@ -1,5 +1,4 @@
-import random, os, shutil, json, time, threading
-# from .merge_images import merge_images
+import random, os, shutil, time, threading
 from .utils import merge_images, write_smart_contact
 
 PATH_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../')
