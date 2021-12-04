@@ -1,7 +1,7 @@
 import React from 'react'
 import { CodeBlock } from './codeBlock/CodeBlock'
 import metaplexInstallImage from '../assets/metaplex-install.png'
-import { useLazyLoad } from '../hooks/useLazyImages'
+import { useLazyLoad } from '../hooks'
 import './Documentation.scss'
 const CandyMachineDocs = React.lazy(() => import('./candyMachineDocs/CandyMachineDocs'))
 const ApplicationOperationDocs = React.lazy(() => import('./applicationOperationDocs/ApplicationOperation'))

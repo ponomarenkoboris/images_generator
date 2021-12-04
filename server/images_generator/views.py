@@ -195,7 +195,7 @@ class CandyMachineConfig(APIView):
         :return: candy_conf or empty
         """
 
-        candy_conf = models.CandyMachine.object.all()
+        candy_conf = models.CandyMachine.objects.all()
         candy_conf = serializers.CandyMachineSerializer(candy_conf, many=True).data
 
         if len(candy_conf) == 0:
@@ -204,8 +204,22 @@ class CandyMachineConfig(APIView):
                 status=status.HTTP_200_OK
             )
 
+        config = {}
+        for key, value in candy_conf[0].items():
+            if key == 'authority':
+                config['treasury'] = value
+            if key == 'config':
+                config['config'] = value
+            if key == 'candy_machine_id':
+                config['candyMachineId'] = value
+            if key == 'solana_cluster':
+                config['network'] = value
+            if key == 'rpc_host':
+                config['connection'] = value
+            if key == 'start_date':
+                config['startDateSeed'] = value
         return Response(
-            data={'message': 'Candy machine configuration got successfully', 'candyConfig': candy_conf},
+            data={'message': 'Candy machine configuration got successfully', 'candyConfig': config},
             status=status.HTTP_200_OK
         )
 
@@ -217,18 +231,65 @@ class CandyMachineConfig(APIView):
         :return: message about success or not success saving
         """
 
-        candy_conf = request.data
-        candy_conf = serializers.CandyMachineSerializer(data=candy_conf)
+        request_type = request.data.pop('type', None)
 
-        if candy_conf.is_valid():
-            candy_conf.save()
+        if request_type is not None and request_type == 'update':
+            request_conf = request.data.pop('candyConfig', None)
+
+            if request_conf is None:
+                return Response(
+                    data={'message': 'Invalid candy configuration'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            candy_machine_conf = {}
+
+            for key, value in request_conf.items():
+                exists = value or None
+
+                if exists is None:
+                    return Response(
+                        data={'message': f'Value {key} is invalid'}
+                    )
+
+                if key == 'treasury':
+                    candy_machine_conf['authority'] = value
+                if key == 'config':
+                    candy_machine_conf['config'] = value
+                if key == 'candyMachineId':
+                    candy_machine_conf['candy_machine_id'] = value
+                if key == 'network':
+                    candy_machine_conf['solana_cluster'] = value
+                if key == 'connection':
+                    candy_machine_conf['rpc_host'] = value
+                if key == 'startDateSeed':
+                    candy_machine_conf['start_date'] = value
+
+            models.CandyMachine.objects.all().delete()
+            candy_machine_conf = serializers.CandyMachineSerializer(data=candy_machine_conf)
+
+            if candy_machine_conf.is_valid():
+                candy_machine_conf.save()
+                return Response(
+                    data={'message': 'Candy configuration saved successfully.'},
+                    status=status.HTTP_201_CREATED
+                )
+            else:
+                print('not valid')
+                return Response(
+                    data={'message': 'Invalid candy configuration'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        if request_type is not None and request_type == 'reset':
+            models.CandyMachine.objects.all().delete()
             return Response(
-                data={'message': 'Candy configuration was successfully saved'},
-                status=status.HTTP_201_CREATED
+                data={'message': 'Candy configuration was reset successfully'},
+                status=status.HTTP_200_OK
             )
 
         else:
             return Response(
-                data={'message': 'Candy machine configuration is not valid'},
-                status=status.HTTP_403_FORBIDDEN
+                data={'message': 'Invalid send data'},
+                status=status.HTTP_400_BAD_REQUEST
             )

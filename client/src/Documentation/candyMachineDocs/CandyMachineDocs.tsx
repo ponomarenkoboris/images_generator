@@ -1,7 +1,7 @@
 import candyMachineDirImage from '../../assets/candy-cli.png'
 import candyDataImages from '../../assets/candy_data.jpg'
 import candyStartImage from '../../assets/starting_candy_machine.jpg'
-import { useLazyLoad } from '../../hooks/useLazyImages'
+import { useLazyLoad } from '../../hooks'
 import { CodeBlock } from "../codeBlock/CodeBlock"
 import './CandyMachineDocs.scss'
 

@@ -1,6 +1,6 @@
 import { CandyMachineSetup } from "./machineSetup/CandyMachineSetup"
 import { MintNft } from "./mintNft/MintNft"
-import useCandyConf from "../hooks/useCandyConf"
+import { useCandyConf } from "../hooks"
 import './Mint.scss'
 
 const txTimeout = 30000
