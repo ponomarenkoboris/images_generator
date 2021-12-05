@@ -4,8 +4,8 @@ import { OutputImageConf, AlgoActionCreator, SizeValue } from './types'
 const initialState: OutputImageConf = {
     images_count: 1,
     size: {
-        height: 1416,
-        width: 672
+        height: 672,
+        width: 1416
     },
     time_limit: false,
     sequences_is_unique: false,

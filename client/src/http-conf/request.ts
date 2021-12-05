@@ -5,7 +5,8 @@ export const endpoints = {
     metadata: 'set-token-metadata/',
     algorithmConfig: 'set-algorithm-config/',
     createAssets: 'create-assets/',
-    getSetup: 'get-setup/'
+    getSetup: 'get-setup/',
+    candyMachine: 'candy-machine/'
 }
 
 const request = axios.create({

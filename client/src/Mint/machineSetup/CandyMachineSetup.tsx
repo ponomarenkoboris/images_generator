@@ -1,11 +1,34 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateCandyConfig, resetCandyConfig } from '../../store/candyStore/candyActionCreators'
 import { UpdateMachineConfigProps } from '../../store/candyStore/types'
 import { TextField, Select, MenuItem, FormControl, InputLabel, Button } from '@material-ui/core'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { fetchCandyMachine } from '../helpers/utils'
 import './CandyMachineSetup.scss'
+
+const initialState = {
+    treasury: '',
+    config: '',
+    candyMachineId: '',
+    network: '',
+    connection: '',
+    startDateSeed: ''
+}
+
+const clusters = [
+    { id: 1, cluster: 'devnet' },
+    { id: 2, cluster: 'mainnet' },
+    { id: 3, cluster: 'testnet' }
+]
+
+const rpcHosts = [
+    { id: 1, rpcHost: 'https://api.testnet.solana.com' },
+    { id: 2, rpcHost: 'https://api.devnet.solana.com' },
+    { id: 3, rpcHost: 'https://api.mainnet-beta.solana.com' },
+    { id: 4, rpcHost: 'https://solana-api.projectserum.com' },
+]
 
 export const CandyMachineSetup = () => {
     const machineConfig = useSelector((state: { candy: UpdateMachineConfigProps }) => state.candy)
@@ -13,15 +36,31 @@ export const CandyMachineSetup = () => {
     const [isShown, setIsShonw] = useState(false)
     const dispatch = useDispatch()
 
-    const updateCandyMachine = () => {
+    const updateCandyMachine = async () => {
+        await fetchCandyMachine('update', conf)
         dispatch(updateCandyConfig(conf))
         setIsShonw(false)
     }
     
-    const resetCandyMachine = () => {
+    const resetCandyMachine = async () => {
+        await fetchCandyMachine('reset')
         dispatch(resetCandyConfig())
-        setConf({} as UpdateMachineConfigProps)
+        setConf(initialState)
     }
+
+    const getCandyMachine = async () => {
+        const serverConfig = await fetchCandyMachine('get')
+        if (serverConfig) {
+            dispatch(updateCandyConfig(serverConfig))
+            setConf(serverConfig)
+        }
+    }
+
+    useEffect(() => {
+        getCandyMachine()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div className='candy__setup'>
@@ -61,9 +100,7 @@ export const CandyMachineSetup = () => {
                             value={conf.network}
                             onChange={e => setConf(prevConf => ({ ...prevConf, network: e.target.value as string }))}
                         >
-                            <MenuItem value={'devnet'}>devnet</MenuItem>
-                            <MenuItem value={'mainnet'}>mainnet</MenuItem>
-                            <MenuItem value={'testnet'}>testnet</MenuItem>
+                            {clusters.map(({ id, cluster }) => <MenuItem key={id} value={cluster}>{cluster}</MenuItem>)}
                         </Select>
                     </FormControl>
                     <FormControl
@@ -76,7 +113,7 @@ export const CandyMachineSetup = () => {
                             value={conf.connection}
                             onChange={e => setConf(prevConf => ({ ...prevConf, connection: e.target.value as string}))}
                         >
-                            <MenuItem value={'https://explorer-api.devnet.solana.com'}>https://explorer-api.devnet.solana.com</MenuItem>
+                            {rpcHosts.map(({ id, rpcHost }) => <MenuItem key={id} value={rpcHost}>{rpcHost}</MenuItem>)}
                         </Select>
                     </FormControl>
                     <div className="candy__setup-actions" >
@@ -92,6 +129,12 @@ export const CandyMachineSetup = () => {
                             onClick={resetCandyMachine}
                         >
                             Сбросить настройки
+                        </Button>
+                        <Button
+                            variant='outlined'
+                            onClick={getCandyMachine}
+                        >
+                            Загрузить с сервера
                         </Button>
                         <Button
                             variant='outlined'

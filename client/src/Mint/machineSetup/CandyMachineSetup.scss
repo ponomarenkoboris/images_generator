@@ -20,7 +20,9 @@
 		.candy__setup-actions {
 			margin-top: 30px;
 			display: flex;
-			justify-content: space-between;
+			flex-wrap: wrap;
+			gap: 15px;
+			justify-content: center;
 		}
 	}
 

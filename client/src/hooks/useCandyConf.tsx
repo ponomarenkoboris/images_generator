@@ -15,19 +15,15 @@ const useCandyConf = (): MachineConfig | null => {
             case 'treasury':
             case 'config':
             case 'candyMachineId':
-                localStorage.setItem(key, currentConfig[key])
                 machineConfig[key] = new web3.PublicKey(currentConfig[key])
                 break
             case 'network':
-                localStorage.setItem(key, currentConfig[key])
                 machineConfig[key] = currentConfig[key] as WalletAdapterNetwork
                 break
             case 'connection':
-                localStorage.setItem(key, currentConfig[key])
                 machineConfig[key] = new web3.Connection(currentConfig[key])
                 break
             case 'startDateSeed':
-                localStorage.setItem(key, currentConfig[key])
                 machineConfig[key] = parseInt(currentConfig[key], 10)
                 break
         }

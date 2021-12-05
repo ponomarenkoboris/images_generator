@@ -2,12 +2,12 @@ import { ActionCreator, UpdateMachineConfigProps } from './types'
 import actionTypes from './candyTypes'
 
 const initialState = {
-    treasury: localStorage.getItem('treasury') ?? '',
-    config: localStorage.getItem('config') ?? '',
-    candyMachineId: localStorage.getItem('candyMachineId') ?? '',
-    network: localStorage.getItem('network') ?? '',
-    connection: localStorage.getItem('connection') ?? '',
-    startDateSeed: localStorage.getItem('startDateSeed') ?? '',   
+    treasury: '',
+    config: '',
+    candyMachineId: '',
+    network: '',
+    connection: '',
+    startDateSeed: '',   
 }
 
 const candyReducer = (state = initialState, action: ActionCreator) => {
@@ -19,7 +19,6 @@ const candyReducer = (state = initialState, action: ActionCreator) => {
             const stateCopy: UpdateMachineConfigProps = Object.assign({}, state)
             for (let key in stateCopy) {
                 stateCopy[key] = ''
-                localStorage.removeItem(key)
             }
 
             return { ...stateCopy }

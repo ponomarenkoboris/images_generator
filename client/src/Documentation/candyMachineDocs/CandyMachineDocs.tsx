@@ -17,7 +17,7 @@ const CandyMachineDocs = () => {
                 <p>
                     Прежде чем перейти к созданию Candy Machine, убедитесь, что вы установили 
                     <span onClick={() => scrollToElement('#NFT-necessary-programs')}>{" "}этот список программ</span>. 
-                    С полным списокм команд можно знакомиться <a href="https://github.com/metaplex-foundation/metaplex/blob/a733ebb2262da68d3400f96861fe6ad199e48c3c/js/packages/cli/README.md">здесь</a>.
+                    С полным списокм команд можно знакомиться <a target="_blank" rel="noreferrer" href="https://github.com/metaplex-foundation/metaplex/blob/a733ebb2262da68d3400f96861fe6ad199e48c3c/js/packages/cli/README.md">здесь</a>.
                 </p>
             </div>
             <div className='candy__machine-item'>
@@ -101,6 +101,10 @@ const CandyMachineDocs = () => {
                 <p>
                     Далее, необходимо подключить крипто кошелек. После чего можно будет чеканить NFT арты.
                 </p>
+            </div>
+            <div className='candy__machine-item'>
+                <p>Чтобы сгенерировать один NFT токен можно воспользоваться командой</p>
+                <CodeBlock>ts-node ./src/candy-machine-cli.ts mint_one_token -k path_to_keypair</CodeBlock>
             </div>
             <div className='candy__machine-item'>
                 <p>Чтобы сгенерировать необходимое колличество NFT из консоли, необходимо ввести следющую команду:</p>
