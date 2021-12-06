@@ -35,7 +35,7 @@ class SizeConfig(models.Model):
 
 # Candy Machine
 class CandyMachine(models.Model):
-    solana_cluster = models.CharField(max_length=7, blank=True)
+    solana_cluster = models.CharField(max_length=13, blank=True)
     candy_machine_id = models.TextField(blank=True)
     start_date = models.TextField(blank=True)
     config = models.TextField(blank=True)

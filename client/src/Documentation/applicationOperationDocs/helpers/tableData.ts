@@ -15,7 +15,7 @@ export const tokenMetadataCollectTable = [
 export const tokenMetadatProperTable = [
     {name: 'files', type: 'array', description: 'Массив объектов, которые содержат адрес и тип изображения (генерируемое поле)'},
     {name: 'category', type: 'string', description: 'Один из валидных типов (изменяемое поле)'},
-    {name: 'creators', type: 'array', description: 'Массив объектов, которые содержат адерсс кошелка создателя и процент от seller_fee_basis_points <br />(5% - 500; 10% - 1000) (изменяемое поле)'}
+    {name: 'creators', type: 'array', description: 'Массив объектов, которые содержат адерсс кошелка создателя и процент от seller_fee_basis_points (50% - 50) (изменяемое поле)'}
 ]
 
 export const algoConfTable = [

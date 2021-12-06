@@ -1,12 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { OutputImageConf } from '../../store/algorithmSetupStore/types'
-import { 
-    updateImagesCount, 
-    updateSize, 
-    updateTimeout, 
-    updateSequencesUnique, 
-    updateBackgroundColor
-} from '../../store/algorithmSetupStore/algorithmActionCreators'
+import { updateImagesCount, updateSize, updateTimeout, updateSequencesUnique, updateBackgroundColor } from '../../store/algorithmSetupStore/algorithmActionCreators'
 import { toNumberValue, validateConf } from '../helpers/utils'
 import { TextField, Button,FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import request, { endpoints } from '../../http-conf/request'
@@ -18,8 +12,7 @@ export const AlgorithmSetup = () => {
 
     const saveOutputConf = async () => {
         try {
-            const response = await request.post(endpoints.algorithmConfig, algConf)
-            console.log(response)
+            await request.post(endpoints.algorithmConfig, algConf)
         } catch (error) {
             console.error(error)
         }

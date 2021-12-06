@@ -20,8 +20,7 @@ const Mint = () => {
                     treasury={machineConf.treasury}
                     txTimeout={txTimeout}
                 />
-            }
-            
+            }            
         </div>
     )
 }

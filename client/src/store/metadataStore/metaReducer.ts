@@ -81,7 +81,6 @@ const metaReducer = (state = initialState, action: MetadataActionCreator<unknown
             }
 
         case actionTypes.REMOVE_META_PROPERTIES_CREATORS:
-            console.log(action.payload)
             const creators = state.properties.creators.filter(creator => creator.id !== action.payload)
             return {
                 ...state,

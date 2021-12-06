@@ -1,7 +1,7 @@
 import { tokenMetadataTable, tokenMetadataCollectTable, tokenMetadatProperTable, algoConfTable } from './helpers/tableData'
 import outputImageConfImage from '../../assets/output_image_config.jpg'
 import assetsSlicesImage from '../../assets/slices.jpg'
-import tokenMetadataImage from '../../assets/token_metadata.png'
+import tokenMetadataImage from '../../assets/token_metadata.jpg'
 import downloadBtnImage from '../../assets/download_from_server.jpg'
 import { useLazyLoad } from '../../hooks'
 import './ApplicationOperation.scss'

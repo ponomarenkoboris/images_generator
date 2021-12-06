@@ -41,11 +41,11 @@ class MetadataSerializer(serializers.ModelSerializer):
         collection = validated_data.pop('collection')
         metadata_instance = TokenMetadata.objects.create(**validated_data)
         Collection.objects.create(metadata=metadata_instance, name=collection['name'], family=collection['family'])
+        properties_instance = Properties.objects.create(metadata=metadata_instance, category=properties['category'])
 
         for creator in properties['creators']:
             address = list(creator.items())[0][1]
             share = list(creator.items())[1][1]
-            properties_instance = Properties.objects.create(metadata=metadata_instance, category=properties['category'])
             Creator.objects.create(property=properties_instance, address=address, share=share)
 
         return metadata_instance

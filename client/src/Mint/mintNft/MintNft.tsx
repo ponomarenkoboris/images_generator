@@ -1,10 +1,9 @@
-import { useEffect, useReducer } from 'react'
+import { useEffect, useReducer, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import * as anchor from '@project-serum/anchor'
 import { awaitTransactionSignatureConfirmation, getCandyMachineState, mintOneToken } from '../helpers/solanaUtils/solanaUtils'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
-import { useAnchorWallet } from '@solana/wallet-adapter-react'
 import { WalletDialogButton } from '@solana/wallet-adapter-material-ui'
 
 import { CryptoWallet } from '../../store/cryptoWalletStore/types'
@@ -13,10 +12,11 @@ import { Button, CircularProgress, Snackbar } from '@material-ui/core'
 import Alert from "@material-ui/lab/Alert"
 import { CountDown } from '../countDown/CountDown'
 import { mintReduser } from '../helpers/mintUseReducer/mintReducer'
-import { 
-    refreshCandyMachineState, 
-    changeMintingStatus, 
-    changeSoldOutStatus, 
+import { AnchorWalletContext } from '../../context/AnchorWalletContext'
+import {
+    refreshCandyMachineState,
+    changeMintingStatus,
+    changeSoldOutStatus,
     settingBalanceValue,
     updateAlertState,
     updateIsActive,
@@ -36,7 +36,6 @@ type MintProps = {
 export const MintNft = ({ candyMachineId, config, connection, startDate, treasury, txTimeout }: MintProps) => {
     const cryptoWallet = useSelector((state: { wallet: CryptoWallet }) => state.wallet)
     const dispatchCryptoWallet = useDispatch()
-    
     const initialState = {
         balance: cryptoWallet.balance,
         dateStart: new Date(startDate),
@@ -52,9 +51,9 @@ export const MintNft = ({ candyMachineId, config, connection, startDate, treasur
         }
     }
 
-    const [ state, dispatch ] = useReducer(mintReduser, initialState)
+    const [state, dispatch] = useReducer(mintReduser, initialState)
     const { candyMachine, isMinting, isSoldOut, itemsRemaining, balance, dateStart, alertState, isActive } = state
-    const wallet = useAnchorWallet()
+    const wallet = useContext(AnchorWalletContext)
 
     const updateCandyMachineState = () => {
         let isMounted = true;
@@ -85,7 +84,7 @@ export const MintNft = ({ candyMachineId, config, connection, startDate, treasur
         try {
             dispatch(changeMintingStatus(true))
             if (wallet && candyMachine?.program) {
-                const mintTxId = await mintOneToken( candyMachine, config, wallet.publicKey, treasury)
+                const mintTxId = await mintOneToken(candyMachine, config, wallet.publicKey, treasury)
 
                 const status = await awaitTransactionSignatureConfirmation(mintTxId, txTimeout, connection, 'singleGossip', false)
 
@@ -142,9 +141,9 @@ export const MintNft = ({ candyMachineId, config, connection, startDate, treasur
             }
         })();
 
-        return () => { 
+        return () => {
             // eslint-disable-next-line  @typescript-eslint/no-unused-vars 
-            isMounted = false 
+            isMounted = false
         }
     }, [wallet, connection, dispatchCryptoWallet])
 
@@ -163,9 +162,9 @@ export const MintNft = ({ candyMachineId, config, connection, startDate, treasur
                         <p>Generate a unique image</p>
                     )}
                 </div>
-                {wallet ? 
+                {wallet ?
                     isSoldOut ? null : (
-                        <Button 
+                        <Button
                             variant='outlined'
                             color='primary'
                             disabled={isMinting || !isActive}
@@ -188,9 +187,9 @@ export const MintNft = ({ candyMachineId, config, connection, startDate, treasur
                             )}
                         </Button>
                     )
-                : (
-                    <WalletDialogButton color='primary' />
-                )}
+                    : (
+                        <WalletDialogButton color='primary' />
+                    )}
                 <Snackbar
                     open={alertState.open}
                     autoHideDuration={6000}

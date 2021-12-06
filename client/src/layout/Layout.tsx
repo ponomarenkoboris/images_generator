@@ -4,6 +4,7 @@ import { getPhantomWallet, getSlopeWallet, getSolflareWallet, getSolletWallet, g
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui'
 import { clusterApiUrl } from '@solana/web3.js'
+import { AnchorWalletContextProvider } from '../context/AnchorWalletContext'
 import { useCandyConf } from '../hooks'
 import Header from './Header'
 import './Layout.scss'
@@ -27,17 +28,19 @@ const Layout = ({ children }: LayoutProps ) => {
         <Router>
             <Header />
             <main>
-                <Switch>
-                    <ConnectionProvider endpoint={endpoint}>
-                        <WalletProvider wallets={wallets} autoConnect={true}>
-                            <WalletDialogProvider>
-                                <Suspense fallback={<div>Загрзка...</div>}>
-                                    {children}
-                                </Suspense>
-                            </WalletDialogProvider>
-                        </WalletProvider>
-                    </ConnectionProvider>
-                </Switch>
+                <ConnectionProvider endpoint={endpoint}>
+                    <WalletProvider wallets={wallets} autoConnect={true}>
+                        <WalletDialogProvider>
+                            <AnchorWalletContextProvider>
+                                <Switch>
+                                    <Suspense fallback={<div>Загрзка...</div>}>
+                                        {children}  
+                                    </Suspense>
+                                </Switch>
+                            </AnchorWalletContextProvider>
+                        </WalletDialogProvider>
+                    </WalletProvider>
+                </ConnectionProvider>
             </main>
         </Router>
     )

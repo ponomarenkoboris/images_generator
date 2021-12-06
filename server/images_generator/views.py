@@ -25,9 +25,9 @@ class TokenMetadata(APIView):
         if token_metadata is not None:
             models.TokenMetadata.objects.all().delete()
 
-            data = serializers.MetadataSerializer(data=token_metadata)
-            if data.is_valid():
-                data.save()
+            metadata = serializers.MetadataSerializer(data=token_metadata)
+            if metadata.is_valid():
+                metadata.save()
                 return Response(
                     data={'message': 'Token metadata was successfully created'},
                     status=status.HTTP_201_CREATED
@@ -275,8 +275,7 @@ class CandyMachineConfig(APIView):
                     status=status.HTTP_201_CREATED
                 )
             else:
-                print('not valid')
-                return Response(
+                 return Response(
                     data={'message': 'Invalid candy configuration'},
                     status=status.HTTP_400_BAD_REQUEST
                 )

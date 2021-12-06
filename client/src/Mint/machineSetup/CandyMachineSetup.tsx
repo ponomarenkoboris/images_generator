@@ -19,7 +19,7 @@ const initialState = {
 
 const clusters = [
     { id: 1, cluster: 'devnet' },
-    { id: 2, cluster: 'mainnet' },
+    { id: 2, cluster: 'mainnet-beta' },
     { id: 3, cluster: 'testnet' }
 ]
 
@@ -40,6 +40,7 @@ export const CandyMachineSetup = () => {
         await fetchCandyMachine('update', conf)
         dispatch(updateCandyConfig(conf))
         setIsShonw(false)
+        setTimeout(() => window.location.reload(), 1000)
     }
     
     const resetCandyMachine = async () => {
@@ -57,8 +58,11 @@ export const CandyMachineSetup = () => {
     }
 
     useEffect(() => {
+        let isMounted = true
         getCandyMachine()
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        return () => { isMounted = false }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -122,7 +126,7 @@ export const CandyMachineSetup = () => {
                             color="primary" 
                             onClick={updateCandyMachine}
                         >
-                            Включить Candy Machine
+                            Подключиться к Candy Machine
                         </Button>
                         <Button
                             variant='outlined'

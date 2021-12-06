@@ -55,6 +55,7 @@ export const validateConf = (data: TokenMetadata | OutputImageConf): boolean | v
                     const isNotValid = validateConf(item)
                     if (isNotValid) return true
                 }
+                if (key === 'creators' && value.reduce((acc, curr) => acc + curr.share, 0) !== 100) return true
             } 
             if (validateConf(value)) return true
         }

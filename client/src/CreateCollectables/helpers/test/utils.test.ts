@@ -68,6 +68,29 @@ describe('Testing collection create utils', () => {
         expect(validateConf({ ...metadata, properties: { ...metadata.properties, creators: [] } })).toBe(true)
         expect(validateConf({ ...metadata, properties: { ...metadata.properties, creators: [{ address: '', share: 100 }] } })).toBe(true)
         expect(validateConf({ ...metadata, properties: { ...metadata.properties, creators: [{ address: 'asdfasdfasdfsadf', share: 0 }] } })).toBe(true)
+        let object = { 
+            ...metadata,
+            properties: {
+                ...metadata.properties,
+                creators: [
+                    { address: 'asdfasdfasdfsadf', share: 0 },
+                    { address: 'asdfasdfasdfsadf', share: 100 }
+                ]
+            }
+        }
+        expect(validateConf(object)).toBe(true)
+        object = { 
+            ...metadata,
+            properties: {
+                ...metadata.properties,
+                creators: [
+                    { address: 'asdfasdfasdfsadf', share: 50 },
+                    { address: 'asdfasdfasdfsadf', share: 50 }
+                ]
+            }
+        }
+        expect(validateConf(object)).toBe(undefined)
+
     })
 
     it('should validate algoritm configuration', () => {
